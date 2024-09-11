@@ -59,10 +59,10 @@ DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& po
 int main() {
     std::array<double, 3> points = {1, 2, 3};
     auto answer = calcDerivativeCoef<double, 3>(points);
-    std::cout << "A_0 = " << answer.centralCoef_ << std::endl;
+    std::cout << "A_0 * h = " << answer.centralCoef_ << std::endl;
     int N = answer.otherCoefs_.size();
     for (int i = 0; i != N; ++i)
-        std::cout << "A_" << i + 1 << " = " << answer.otherCoefs_[i] << std::endl;
+        std::cout << "A_" << i + 1 << " * h = " << answer.otherCoefs_[i] << std::endl;
     
     return 0;
 }

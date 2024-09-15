@@ -57,6 +57,27 @@ DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& po
     return DerivativeCoef<RealType, N>(centralCoef, otherCoefs);
 }
 
+template<typename RealType, unsigned int N>
+struct logErrors {
+    std::array<RealType, N> logSteps_;
+    std::array<RealType, N> logCumulatedErrors_;
+
+    logErrors(std::array<RealType, N> steps, std::array<RealType, N> cumulatedErrors) {
+        for (int i = 0; i != N; ++i) {
+            logSteps_[i] = std::log(steps[i]);
+            logCumulatedErrors_[i] = std::log(cumulatedErrors[i]);
+        }
+    }
+};
+
+template<typename RealType, unsigned int N>
+logErrors<RealType, N> errorAnalysis(RealType trueValue, std::array<RealType, N> answers, std::array<RealType, N> steps) {
+    std::array<RealType, N> errors;
+    for (int i = 0; i != N; ++i)
+        errors[i] = std::abs(trueValue - answers[i]);
+    return logErrors<RealType, N>(steps, errors);
+}
+
 int main() {
     std::array<double, 3> points = {1, 2, 3};
     auto answer = calcDerivativeCoef<double, 3>(points);
@@ -64,6 +85,8 @@ int main() {
     int N = answer.otherCoefs_.size();
     for (int i = 0; i != N; ++i)
         std::cout << "A_" << i + 1 << " * h = " << answer.otherCoefs_[i] << std::endl;
+    
+    std::cout << "~~~~~~~~~~~~~~~~~" << std::endl;
     
     std::array<double, 16> steps;
     int n = steps.size();
@@ -84,6 +107,11 @@ int main() {
     std::cout << "N = " << 3 << std::endl;
     for (auto el : answers_3)
         std::cout << el << std::endl;
+    logErrors<double, 16> errors_3 = errorAnalysis<double, 16>(std::exp(1), answers_3, steps);
+    for (int i = 0; i != 16; ++i)
+        std::cout << "log error = " << errors_3.logCumulatedErrors_[i] << ", log step = " << errors_3.logSteps_[i] << std::endl;
+
+    std::cout << "~~~~~~~~~~~~~~~~~" << std::endl;
 
     std::array<double, 4> exp_4 = {1, 2, 3, 4};
     std::array<double, 16> answers_4;
@@ -96,6 +124,11 @@ int main() {
     std::cout << "N = " << 4 << std::endl;
     for (auto el : answers_4)
         std::cout << el << std::endl;
+    logErrors<double, 16> errors_4 = errorAnalysis<double, 16>(std::exp(1), answers_4, steps);
+    for (int i = 0; i != 16; ++i)
+        std::cout << "log error = " << errors_4.logCumulatedErrors_[i] << ", log step = " << errors_4.logSteps_[i] << std::endl;
+    
+    std::cout << "~~~~~~~~~~~~~~~~~" << std::endl;
 
     std::array<double, 5> exp_5 = {1, 2, 3, 4, 5};
     std::array<double, 16> answers_5;
@@ -108,6 +141,9 @@ int main() {
     std::cout << "N = " << 5 << std::endl;
     for (auto el : answers_5)
         std::cout << el << std::endl;
+    logErrors<double, 16> errors_5 = errorAnalysis<double, 16>(std::exp(1), answers_5, steps);
+    for (int i = 0; i != 16; ++i)
+        std::cout << "log error = " << errors_5.logCumulatedErrors_[i] << ", log step = " << errors_5.logSteps_[i] << std::endl;
     
     return 0;
 }

@@ -145,5 +145,22 @@ int main() {
     for (int i = 0; i != 16; ++i)
         std::cout << "log error = " << errors_5.logCumulatedErrors_[i] << ", log step = " << errors_5.logSteps_[i] << std::endl;
     
+    std::cout << "~~~~~~~~~~~~~~~~~" << std::endl;
+
+    std::array<double, 2> exp_2 = {1, 2};
+    std::array<double, 16> answers_2;
+    auto coef_2 = calcDerivativeCoef<double, 2>(exp_2);
+    for (int i = 0; i != 16; ++i) {
+        answers_2[i] = coef_2.centralCoef_ / steps[i] * std::exp(1);
+        for (int j = 0; j != 2; ++j)
+            answers_2[i] += coef_2.otherCoefs_[j] / steps[i] * std::exp(1 + steps[i] * (j + 1));
+    }
+    std::cout << "N = " << 2 << std::endl;
+    for (auto el : answers_2)
+        std::cout << el << std::endl;
+    logErrors<double, 16> errors_2 = errorAnalysis<double, 16>(std::exp(1), answers_2, steps);
+    for (int i = 0; i != 16; ++i)
+        std::cout << "log error = " << errors_2.logCumulatedErrors_[i] << ", log step = " << errors_2.logSteps_[i] << std::endl;
+
     return 0;
 }

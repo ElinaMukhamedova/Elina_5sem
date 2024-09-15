@@ -1,5 +1,6 @@
 #include <array>
 #include <iostream>
+#include <cmath>
 
 template<typename RealType, unsigned int N>
 struct DerivativeCoef {
@@ -63,6 +64,50 @@ int main() {
     int N = answer.otherCoefs_.size();
     for (int i = 0; i != N; ++i)
         std::cout << "A_" << i + 1 << " * h = " << answer.otherCoefs_[i] << std::endl;
+    
+    std::array<double, 16> steps;
+    int n = steps.size();
+    steps.fill(1);
+    for (int i = 1; i != n; ++i)
+        steps[i] = steps[i - 1] / 10;
+//    for (auto el : steps)
+//        std::cout << el << std::endl;
+    
+    std::array<double, 3> exp_3 = {1, 2, 3};
+    std::array<double, 16> answers_3;
+    auto coef_3 = calcDerivativeCoef<double, 3>(exp_3);
+    for (int i = 0; i != 16; ++i) {
+        answers_3[i] = coef_3.centralCoef_  / steps[i] * std::exp(1);
+        for (int j = 0; j != 3; ++j)
+            answers_3[i] += coef_3.otherCoefs_[j] / steps[i] * std::exp(1 + steps[i] * (j + 1));
+    }
+    std::cout << "N = " << 3 << std::endl;
+    for (auto el : answers_3)
+        std::cout << el << std::endl;
+
+    std::array<double, 4> exp_4 = {1, 2, 3, 4};
+    std::array<double, 16> answers_4;
+    auto coef_4 = calcDerivativeCoef<double, 4>(exp_4);
+    for (int i = 0; i != 16; ++i) {
+        answers_4[i] = coef_4.centralCoef_ / steps[i] * std::exp(1);
+        for (int j = 0; j != 4; ++j)
+            answers_4[i] += coef_4.otherCoefs_[j] / steps[i] * std::exp(1 + steps[i] * (j + 1));
+    }
+    std::cout << "N = " << 4 << std::endl;
+    for (auto el : answers_4)
+        std::cout << el << std::endl;
+
+    std::array<double, 5> exp_5 = {1, 2, 3, 4, 5};
+    std::array<double, 16> answers_5;
+    auto coef_5 = calcDerivativeCoef<double, 5>(exp_5);
+    for (int i = 0; i != 16; ++i) {
+        answers_5[i] = coef_5.centralCoef_ / steps[i] * std::exp(1);
+        for (int j = 0; j != 5; ++j)
+            answers_5[i] += coef_5.otherCoefs_[j] / steps[i] * std::exp(1 + steps[i] * (j + 1));
+    }
+    std::cout << "N = " << 5 << std::endl;
+    for (auto el : answers_5)
+        std::cout << el << std::endl;
     
     return 0;
 }

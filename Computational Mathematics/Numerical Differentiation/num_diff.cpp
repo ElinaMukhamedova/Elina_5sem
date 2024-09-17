@@ -62,20 +62,23 @@ struct logErrors {
     std::array<RealType, N> logSteps_;
     std::array<RealType, N> logCumulatedErrors_;
 
-    logErrors(std::array<RealType, N> steps, std::array<RealType, N> cumulatedErrors) {
+    logErrors(std::array<RealType, N> logSteps, std::array<RealType, N> logCumulatedErrors) {
         for (int i = 0; i != N; ++i) {
-            logSteps_[i] = std::log(steps[i]);
-            logCumulatedErrors_[i] = std::log(cumulatedErrors[i]);
+            logSteps_[i] = logSteps[i];
+            logCumulatedErrors_[i] = logCumulatedErrors[i];
         }
     }
 };
 
 template<typename RealType, unsigned int N>
 logErrors<RealType, N> errorAnalysis(RealType trueValue, std::array<RealType, N> answers, std::array<RealType, N> steps) {
-    std::array<RealType, N> errors;
-    for (int i = 0; i != N; ++i)
-        errors[i] = std::abs(trueValue - answers[i]);
-    return logErrors<RealType, N>(steps, errors);
+    std::array<RealType, N> logErrors;
+    std::array<RealType, N> logSteps;
+    for (int i = 0; i != N; ++i) {
+        logSteps[i] = std::log(steps[i]);
+        logErrors[i] = std::log(std::abs(trueValue - answers[i]));
+    }
+    return ::logErrors<RealType, N>(logSteps, logErrors);
 }
 
 int main() {

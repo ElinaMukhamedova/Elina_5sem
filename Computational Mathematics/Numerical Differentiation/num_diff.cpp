@@ -26,12 +26,29 @@ std::array<std::array<RealType, N + 1>, N> createMatrix(const std::array<RealTyp
 template<typename RealType, unsigned int N>
 DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& points) {
     auto matr = createMatrix<RealType, N>(points);
-    for (int n = 0; n != N; ++n)                 // convert matr to upper triangular
-        for (int i = n + 1; i != N; ++i) {
-            double k = matr[i][n] / matr[n][n];
-            for (int j = 0; j != N + 1; ++j)
-                matr[i][j] -= k * matr[n][j];
+    for (int n = 0; n != N; ++n) {                // convert matr to upper triangular
+        bool flag = false;
+        int k = n;
+        if (matr[k][n] != 0)
+            flag = true;
+        else
+            ++k;
+        while (flag != true && k != N) {          // try to find the first row
+            if (matr[k][n] != 0) {                // with nonzero n-th entry
+                flag = true;                      // and swap it with the n-th row
+                std::array<RealType, N + 1> copy = matr[k];
+                matr[k] = matr[n];
+                matr[n] = copy;
+            }
+            ++k;
         }
+        if (k != N)                               // if there is no such raw,
+            for (int i = n + 1; i != N; ++i) {    // just skip this step
+                double k = matr[i][n] / matr[n][n];
+                for (int j = 0; j != N + 1; ++j)
+                    matr[i][j] -= k * matr[n][j];
+            }
+    }
     for (int i = 0; i != N; ++i) {               // make diagonal elements all equal to 1
         double pivot = matr[i][i];
         for (int j = i; j != N + 1; ++j)
@@ -71,6 +88,15 @@ logErrors<RealType, N> errorAnalysis(RealType trueValue, std::array<RealType, N>
 }
 
 int main() {
+    std::array<double, 2> points_2 = {1, 2};
+    auto answer_2 = calcDerivativeCoef<double, 2>(points_2);
+    std::cout << "A_0 * h = " << answer_2.centralCoef_ << std::endl;
+    int N_2 = answer_2.otherCoefs_.size();
+    for (int i = 0; i != N_2; ++i)
+        std::cout << "A_" << i + 1 << " * h = " << answer_2.otherCoefs_[i] << std::endl;
+    
+    std::cout << "~~~~~~~~~~~~~~~~~" << std::endl;
+
     std::array<double, 3> points = {1, 2, 3};
     auto answer = calcDerivativeCoef<double, 3>(points);
     std::cout << "A_0 * h = " << answer.centralCoef_ << std::endl;

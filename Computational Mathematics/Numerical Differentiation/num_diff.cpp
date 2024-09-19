@@ -24,8 +24,7 @@ std::array<std::array<RealType, N + 1>, N> createMatrix(const std::array<RealTyp
 }
 
 template<typename RealType, unsigned int N>
-DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& points) {
-    auto matr = createMatrix<RealType, N>(points);
+void transformSLE(std::array<std::array<RealType, N + 1>, N>& matr) {
     for (int n = 0; n != N; ++n) {                // convert matr to upper triangular
         bool flag = false;
         int k = n;
@@ -60,6 +59,12 @@ DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& po
             for (int j = i; j != N + 1; ++j)
                 matr[n][j] -= k * matr[i][j];
         }
+}
+
+template<typename RealType, unsigned int N>
+DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& points) {
+    std::array<std::array<RealType, N + 1>, N> matr = createMatrix<RealType, N>(points);
+    transformSLE<RealType, N>(matr);
     std::array<RealType, N> otherCoefs;
     RealType centralCoef = 0;
     for (int i = 0; i != N; ++i) {

@@ -6,10 +6,6 @@ template<typename RealType, unsigned int N>
 struct DerivativeCoef {
     RealType centralCoef_;
     std::array<RealType, N> otherCoefs_;
-
-    DerivativeCoef(RealType centralCoef, std::array<RealType, N> otherCoefs) {
-        centralCoef_ = centralCoef; otherCoefs_ = otherCoefs;
-    }
 };
 
 template<typename RealType, unsigned int N>
@@ -54,20 +50,13 @@ DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& po
         otherCoefs[i] = k;
         centralCoef -= k;
     }
-    return DerivativeCoef<RealType, N>(centralCoef, otherCoefs);
+    return {centralCoef, otherCoefs};
 }
 
 template<typename RealType, unsigned int N>
 struct logErrors {
     std::array<RealType, N> logSteps_;
     std::array<RealType, N> logCumulatedErrors_;
-
-    logErrors(std::array<RealType, N> logSteps, std::array<RealType, N> logCumulatedErrors) {
-        for (int i = 0; i != N; ++i) {
-            logSteps_[i] = logSteps[i];
-            logCumulatedErrors_[i] = logCumulatedErrors[i];
-        }
-    }
 };
 
 template<typename RealType, unsigned int N>
@@ -78,7 +67,7 @@ logErrors<RealType, N> errorAnalysis(RealType trueValue, std::array<RealType, N>
         logSteps[i] = std::log(steps[i]);
         logErrors[i] = std::log(std::abs(trueValue - answers[i]));
     }
-    return ::logErrors<RealType, N>(logSteps, logErrors);
+    return {logSteps, logErrors};
 }
 
 int main() {

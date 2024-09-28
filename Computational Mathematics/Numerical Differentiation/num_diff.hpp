@@ -33,7 +33,7 @@ void transformSLE(std::array<std::array<RealType, N>, N>& matr, std::array<RealT
             if (std::abs(matr[i][col]) > std::abs(matr[i][col]))
                 sel_row = i;
         }
-        if (std::abs(matr[sel_row][col]) > std::numeric_limits<RealType>::epsilon()) {
+        if (std::abs(matr[sel_row][col]) != 0) {
             std::swap(matr[sel_row], matr[row]);
             std::swap(vect[sel_row], vect[row]);
 

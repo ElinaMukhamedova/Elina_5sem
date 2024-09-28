@@ -63,10 +63,10 @@ DerivativeCoef<RealType, N> calcDerivativeCoef(const std::array<RealType, N>& po
     otherCoefs.fill(0);
     otherCoefs[N - 1] = 1;
     transformSLE<RealType, N>(matr, otherCoefs);
-    //RealType centralCoef = std::accumulate(otherCoefs.begin(), otherCoefs.end(), 0, std::minus<RealType>());
-    RealType centralCoef = 0;
-    for (RealType el : otherCoefs)
-        centralCoef -= el;
+    RealType centralCoef = std::accumulate(otherCoefs.begin(), otherCoefs.end(), (RealType)0, std::minus<RealType>());
+    //RealType centralCoef = 0;
+    //for (RealType el : otherCoefs)
+    //    centralCoef -= el;
     return {centralCoef, otherCoefs};
 }
 

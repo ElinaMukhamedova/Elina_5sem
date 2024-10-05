@@ -29,16 +29,12 @@ int main() {
             std::cout << "  x" + std::to_string(i) + " = " << even_points[i]
             << "    f(x" + std::to_string(i) + ") = " << values[i] << std::endl;
         }
-        //std::cout << "Interpolated data" << std::endl;
-        //for (int i = 0; i < 100; ++i) {
-        //    std::cout << "  x" + std::to_string(i) + " = " << x_plot[i]
-        //    << "    y(x" + std::to_string(i) + ") = " << y_plot[i] << std::endl;
-        //}
-        //std::cout << std::endl;
-        for (int i = 0; i < N; ++i) {
-            std::cout << "  x" + std::to_string(i) + " = " << even_points[i]
-            << "    y(x" + std::to_string(i) + ") = " << D.predict(even_points[i]) << std::endl;
+        std::cout << "Interpolated data" << std::endl;
+        for (int i = 0; i < 100; ++i) {
+            std::cout << "  x" + std::to_string(i) + " = " << x_plot[i]
+            << "    y(x" + std::to_string(i) + ") = " << y_plot[i] << std::endl;
         }
+        std::cout << std::endl;
     }
 
     return 0;

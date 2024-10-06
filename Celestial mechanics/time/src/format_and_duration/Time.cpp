@@ -1,5 +1,6 @@
-#include "Time.hpp"
 #include <cmath>
+#include "Time.hpp"
+#include <sofa/sofa.h>
 
 Time::Time(double jd1, double jd2) {
     double jd1_int;
@@ -20,3 +21,18 @@ Time Time::fromMJD(double mjd) noexcept {
     return fromJD(mjd + 2400000.5);
 }
 
+Time Time::fromCalendar(int year, int month, int day) {
+    double djm0;
+    double djm;
+    int result = sofa::iauCal2jd(year, month, day, &djm0, &djm);
+    switch (result) {
+        case -1:
+            throw Time::Exception("bad year (JD not computed)");
+        case -2:
+            throw Time::Exception("bad month (JD not computed)");
+        case -3:
+            throw Time::Exception("bad day (JD not computed)");
+        default:
+            return Time::fromMJD(djm);
+    }
+}

@@ -7,6 +7,13 @@ class Time {
 
         Time static fromJD(double jd) noexcept;
         Time static fromMJD(double mjd) noexcept;
+
+        class Exception {
+            std::string error_;
+
+            public:
+                Exception(std::string error) : error_(error) {}
+        }
         Time static fromCalendar(int year, int month, int day);
         
         double jdInt() const noexcept;

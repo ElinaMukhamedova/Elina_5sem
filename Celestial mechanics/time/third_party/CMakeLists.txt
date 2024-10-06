@@ -1,1 +1,2 @@
 add_subdirectory(SOFA)
+add_subdirectory(googletest)

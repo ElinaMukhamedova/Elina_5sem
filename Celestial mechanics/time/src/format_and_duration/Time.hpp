@@ -13,7 +13,7 @@ class Time {
 
             public:
                 Exception(std::string error) : error_(error) {}
-        }
+        };
         Time static fromCalendar(int year, int month, int day);
         
         double jdInt() const noexcept;

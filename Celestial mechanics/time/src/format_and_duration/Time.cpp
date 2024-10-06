@@ -36,3 +36,19 @@ Time Time::fromCalendar(int year, int month, int day) {
             return Time::fromMJD(djm);
     }
 }
+
+double Time::jdInt() {
+    return jdInt_;
+}
+
+double Time::jdFrac() {
+    return jdFrac_;
+}
+
+double Time::jd() {
+    return jdInt_ + jdFrac_;
+}
+
+double Time::mjd() {
+    return Time::jd() - 2400000.5;
+}

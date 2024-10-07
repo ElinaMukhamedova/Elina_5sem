@@ -15,7 +15,7 @@ class Time {
         double jd() const noexcept;
         double mjd() const noexcept;
 
-        auto operator<=>(const Time& other) const noexcept = default;
+        //auto operator<=>(const Time& other) const noexcept = default;
 };
 
 class Duration {

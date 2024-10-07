@@ -1,8 +1,8 @@
 #include <iostream>
-#include <format_and_duration/Time.hpp>
+#include <time/Time.hpp>
 
 int main() {
-    Time today = Time::fromCalendar(2024, 10, 6);
+    Time today = Time::fromCalendar(2024, 10, 7, 20, 49, 13);
     std::cout << today.jdInt() << std::endl;
 
     return 0;

@@ -10,3 +10,4 @@ add_subdirectory(tests)
 add_executable(celestial_mechanics_main main.cpp)
 
 target_link_libraries(celestial_mechanics_main ${PROJECT_NAME})
+target_include_directories()

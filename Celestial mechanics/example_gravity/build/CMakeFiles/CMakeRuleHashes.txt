@@ -1,0 +1,6 @@
+# Hashes of file build rules.
+e6370c54b9d357efe665af1b2bcd021e GeographicLib/CMakeFiles/exampleprograms
+49ebe15bd7f4f9e502faddb7b277f270 GeographicLib/tools/CMakeFiles/scripts
+6affe1bbbcfe8fd1a70663de2c6dea4e GeographicLib/tools/geographiclib-get-geoids
+004424c2b943f85ca9048a3f8441c548 GeographicLib/tools/geographiclib-get-gravity
+0e1d699e40ff4ce49446eb7e1f790c9b GeographicLib/tools/geographiclib-get-magnetic

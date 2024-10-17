@@ -3,7 +3,7 @@
 #include "Time.hpp"
 #include "sofa.h"
 
-Time::Time(double jd1, double jd2) {
+Time::Time(double jd1, double jd2) noexcept{
     double jd1_int;
     double jd1_frac = std::modf(jd1, &jd1_int);
     double jd2_int;

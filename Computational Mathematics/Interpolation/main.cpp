@@ -15,7 +15,7 @@ int main() {
             even_points[i] = node;
             values[i] = std::exp(node);
         }
-        NewtonInterpolant D = NewtonInterpolant<double, double, 3>{even_points, values};
+        NewtonInterpolant<double, double, 3> D = NewtonInterpolant<double, double, 3>{even_points, values};
         std::array<double, 100> x_plot;
         std::array<double, 100> y_plot;
         delta = (endpoints[1] - endpoints[0]) / 99;

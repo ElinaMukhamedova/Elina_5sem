@@ -24,12 +24,3 @@ class NewtonInterpolant {
         return ans;
     }
 };
-
-template<typename xType, typename yType, unsigned int N>
-class Plot {
-
-    std::array<xType, N> x_data;
-    std::array<yType, N> y_data;
-    
-
-};

@@ -22,8 +22,8 @@ private:
     const T start_;
     const T end_;
     std::size_t N_;
-    std::array<double, N + 1> weights_;
-    std::array<T, N + 1> roots_;
+    std::array<double, N_ + 1> weights_;
+    std::array<T, N_ + 1> roots_;
 
     struct Result {
         double value_;
@@ -33,10 +33,10 @@ private:
     };
 
     Result calculatePolynomialValueAndDerivative(T x) {
-        Result result(std::static_cast<double>(x), 1);
+        Result result(x, 1);
 
         T value_minus_1 = 1;
-        const T k = 1/(x * x - 1);
+        const T k = 1 / (x * x - 1);
         for(std::size_t step = 2; step <= N_; step++) {
             double value = ((2 * step - 1) * x * result.value_ - (step - 1) * value_minus_1) / step;
             result.derivative_ = step * k * (x * value - result.value_);
@@ -71,11 +71,11 @@ public:
         calculateWeightAndRoot();
     }
 
-    const std::array<double, N + 1> getWeights() const {
+    const std::array<double, N_ + 1> getWeights() const {
         return weights_;
     }
 
-    const std::array<T, N + 1> getRoots() const {
+    const std::array<T, N_ + 1> getRoots() const {
         return roots_;
     }
 
@@ -87,15 +87,27 @@ decltype(auto) integrate(
     const typename ArgumentGetter<Callable>::Argument& start,
     const typename ArgumentGetter<Callable>::Argument& end
                         ){
-                            
+                            const LegendrePolynomial legendrePolynomial(start, end, N);
+                            const std::array<double, N + 1> & weights = legendrePolynomial.getWeights();
+                            const std::array<typename ArgumentGetter<Callable>::Argument, N + 1> & roots = legendrePolynomial.getRoots();
+
+                            const typename ArgumentGetter<Callable>::Argument half_width = 0.5 * (end - start);
+                            const typename ArgumentGetter<Callable>::Argument centre_point = 0.5 * (start + end);
+
+                            decltype(auto) integral = 0;
+                            for(int step = 1; step <= N; step++) {
+                                integral += weights[step] * func(half_width * roots[step] + centre_point);
+                            }
+
+                            return integral * half_width;
                         }
 
-template <typename Callable, std::size_t N>
-decltype(auto) integrate(
-    const Callable& func,
-    const typename ArgumentGetter<Callable>::Argument& start,
-    const typename ArgumentGetter<Callable>::Argument& end,
-    const DifType<typename ArgumentGetter<Callable>::Argument>& dx
-                        ){
-
-                        }
+//template <typename Callable, std::size_t N>
+//decltype(auto) integrate(
+//    const Callable& func,
+//    const typename ArgumentGetter<Callable>::Argument& start,
+//    const typename ArgumentGetter<Callable>::Argument& end,
+//    const DifType<typename ArgumentGetter<Callable>::Argument>& dx
+//                        ){
+//
+//                        }

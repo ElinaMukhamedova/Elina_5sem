@@ -80,7 +80,7 @@ public:
 
 };
 
-template <typename Callable, std::size_t N>
+template <std::size_t N, typename Callable>
 decltype(auto) integrate(
     const Callable& func,
     const typename ArgumentGetter<Callable>::Argument& start,

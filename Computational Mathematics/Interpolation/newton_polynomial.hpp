@@ -1,5 +1,7 @@
 #include <array>
 #include <iostream>
+#include <cmath>
+#include <math.h>
 
 template<typename xType, typename yType, unsigned int N>
 class NewtonInterpolant {
@@ -24,3 +26,13 @@ class NewtonInterpolant {
         return ans;
     }
 };
+
+template<typename xType, unsigned int N>
+std::array<xType, N + 1> chebyshev_nodes(xType a, xType b) {
+    xType centre_point = 0.5 * (a + b);
+    xType half_width = 0.5 * (b - a);
+    std::array<xType, N + 1> nodes;
+    for (int i = 0; i <= N; ++i)
+        nodes[i] = centre_point + half_width * std::cos(M_PI * (2 * i + 1) / (2 * N + 2));
+    return nodes;
+}

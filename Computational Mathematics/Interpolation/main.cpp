@@ -118,5 +118,96 @@ int main() {
         std::cout << errors_for_5_nodes[range_i] << ", ";
     std::cout << std::endl;
 
+    ////////////////////////////////
+    N = 3;
+    std::array<double, 3> chebyshev_points_3;
+    std::array<double, 3> chebyshev_values_3;
+    std::array<double, 6> errors_for_3_chebyshev_nodes; 
+    for (int range_i = 0; range_i < 6; ++range_i) {
+        std::array<double, 2> endpoints = endpoints_choice[range_i];
+        chebyshev_points_3 = chebyshev_nodes<double, 2>(endpoints[0], endpoints[1]);
+        for (int i = 0; i < N; ++i) {
+            chebyshev_values_3[i] = std::exp(chebyshev_points_3[i]);
+        }
+        NewtonInterpolant<double, double, 3> C_3 = NewtonInterpolant<double, double, 3>{chebyshev_points_3, chebyshev_values_3};
+        std::array<double, 1000> x_plot;
+        std::array<double, 1000> y_plot;
+        double max_error = 0;
+        double delta = (endpoints[1] - endpoints[0]) / 999;
+        for (int i = 0; i < 1000; ++i) {
+            double point = i * delta;
+            x_plot[i] = point;
+            double y_predict = C_3.predict(point);
+            y_plot[i] = y_predict;
+            double error = std::abs(y_predict - std::exp(point));
+            if (error > max_error)
+                max_error = error;
+        }
+        errors_for_3_chebyshev_nodes[range_i] = max_error;
+    }
+    for (int range_i = 0; range_i < 6; ++range_i)
+        std::cout << errors_for_3_chebyshev_nodes[range_i] << ", ";
+    std::cout << std::endl;
+
+    N = 4;
+    std::array<double, 4> chebyshev_points_4;
+    std::array<double, 4> chebyshev_values_4;
+    std::array<double, 6> errors_for_4_chebyshev_nodes; 
+    for (int range_i = 0; range_i < 6; ++range_i) {
+        std::array<double, 2> endpoints = endpoints_choice[range_i];
+        chebyshev_points_4 = chebyshev_nodes<double, 3>(endpoints[0], endpoints[1]);
+        for (int i = 0; i < N; ++i) {
+            chebyshev_values_4[i] = std::exp(chebyshev_points_4[i]);
+        }
+        NewtonInterpolant<double, double, 4> C_4 = NewtonInterpolant<double, double, 4>{chebyshev_points_4, chebyshev_values_4};
+        std::array<double, 1000> x_plot;
+        std::array<double, 1000> y_plot;
+        double max_error = 0;
+        double delta = (endpoints[1] - endpoints[0]) / 999;
+        for (int i = 0; i < 1000; ++i) {
+            double point = i * delta;
+            x_plot[i] = point;
+            double y_predict = C_4.predict(point);
+            y_plot[i] = y_predict;
+            double error = std::abs(y_predict - std::exp(point));
+            if (error > max_error)
+                max_error = error;
+        }
+        errors_for_4_chebyshev_nodes[range_i] = max_error;
+    }
+    for (int range_i = 0; range_i < 6; ++range_i)
+        std::cout << errors_for_4_chebyshev_nodes[range_i] << ", ";
+    std::cout << std::endl;
+
+    N = 5;
+    std::array<double, 5> chebyshev_points_5;
+    std::array<double, 5> chebyshev_values_5;
+    std::array<double, 6> errors_for_5_chebyshev_nodes; 
+    for (int range_i = 0; range_i < 6; ++range_i) {
+        std::array<double, 2> endpoints = endpoints_choice[range_i];
+        chebyshev_points_5 = chebyshev_nodes<double, 4>(endpoints[0], endpoints[1]);
+        for (int i = 0; i < N; ++i) {
+            chebyshev_values_5[i] = std::exp(chebyshev_points_5[i]);
+        }
+        NewtonInterpolant<double, double, 5> C_5 = NewtonInterpolant<double, double, 5>{chebyshev_points_5, chebyshev_values_5};
+        std::array<double, 1000> x_plot;
+        std::array<double, 1000> y_plot;
+        double max_error = 0;
+        double delta = (endpoints[1] - endpoints[0]) / 999;
+        for (int i = 0; i < 1000; ++i) {
+            double point = i * delta;
+            x_plot[i] = point;
+            double y_predict = C_5.predict(point);
+            y_plot[i] = y_predict;
+            double error = std::abs(y_predict - std::exp(point));
+            if (error > max_error)
+                max_error = error;
+        }
+        errors_for_5_chebyshev_nodes[range_i] = max_error;
+    }
+    for (int range_i = 0; range_i < 6; ++range_i)
+        std::cout << errors_for_5_chebyshev_nodes[range_i] << ", ";
+    std::cout << std::endl;
+
     return 0;
 }

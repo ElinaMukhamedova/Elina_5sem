@@ -87,6 +87,33 @@ class CubicSpline{
                 second_derivatives_.push_back(0);
             }
         
+        CubicSpline(
+            const std::vector<xType>& nodes,
+            const std::vector<yType>& values,
+            const SecondDerivativeType& left,
+            const SecondDerivativeType& right
+            ) : nodes_(nodes), values_(values){
+                int n = nodes.size() - 1;
+                steps_.push_back(nodes[1] - nodes[0]);
+                std::vector<DerivativeType> b;
+                b.push_back((values[1] - values[0]) / steps_[0]);
+                std::vector<DerivativeType> u;
+                for (int i = 1; i < n; ++i) {
+                    steps_.push_back(nodes[i + 1] - nodes[i]);
+                    b.push_back((values[i + 1] - values[i]) / steps_[i]);
+                    u.push_back(6 * (b[i] - b[i - 1]));
+                }
+                u[0] -= steps_[0] * left;
+                u[n - 2] -= steps_[n - 1] * right;
+                CubicSplineMatrix<DeltaXType> matrix = CubicSplineMatrix<DeltaXType>(steps_);
+                std::vector<SecondDerivativeType> z_inner = inner_second_derivatives<DeltaXType, DerivativeType>(matrix, u);
+                second_derivatives_.push_back(left);
+                for (SecondDerivativeType z : z_inner) {
+                    second_derivatives_.push_back(z);
+                }
+                second_derivatives_.push_back(right);
+            }
+        
         std::vector<DeltaXType> getSteps(){
             return steps_;
         }

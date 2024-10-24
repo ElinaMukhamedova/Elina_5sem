@@ -39,7 +39,7 @@ int main() {
         std::cout << elt << ", ";
 
     std::cout << std::endl;
-    
+
     CubicSpline<double, double> spline0 = CubicSpline<double, double>(nodes_choice[0], values_choice[0]);
     for (int j = 0; j < 1000; ++j) {
         std::cout << spline0.interpolate(a + step * j) << ", ";   
@@ -51,6 +51,23 @@ int main() {
     for (int j = 0; j < 1000; ++j) {
         std::cout << spline5.interpolate(a + step * j) << ", ";   
     }
+
+    std::cout << std::endl;
+
+    std::vector<double> errors_1;
+    for (int i = 0; i < N_choice.size(); ++i) {
+        double max_delta = -1;
+        CubicSpline<double, double> spline = CubicSpline<double, double>(nodes_choice[i], values_choice[i], 1, std::exp(10));
+        for (int j = 0; j < 1000; ++j) {
+            double delta = std::abs(spline.interpolate(a + step * j) - std::exp(a + step * j));
+            if (delta > max_delta)
+                max_delta = delta;    
+        }
+        errors_1.push_back(max_delta);
+    }
+
+    for (double elt : errors_1)
+        std::cout << elt << ", ";
 
     return 0;
 }

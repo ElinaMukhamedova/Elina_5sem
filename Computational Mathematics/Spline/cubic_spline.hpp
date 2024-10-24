@@ -6,6 +6,7 @@ template <typename Type>
 class CubicSplineMatrix {
     std::vector<Type> edge_;
     std::vector<Type> diagonal_;
+    
     public:
         CubicSplineMatrix(std::vector<Type> h){
             std::size_t n = h.size();
@@ -48,3 +49,26 @@ std::vector<DivisionType<cType, mType>> inner_second_derivatives (
         }
         return z;
     }
+
+template <typename xType, typename yType>
+class CubicSpline{
+
+    using DeltaXType = DifferenceType<xType>;
+    using DerivativeType = DivisionType<DifferenceType<yType>, DeltaXType>;
+    using SecondDerivativeType = DivisionType<DifferenceType<DerivativeType>, DeltaXType>;
+
+    std::vector<xType> nodes_;
+    std::vector<yType> values_;
+    std::vector<DeltaXType> steps_;
+    std::vector<SecondDerivativeType>, xType>> second_derivatives_;
+
+    public:
+        CubicSpline(
+            const std::vector<xType>& nodes,
+            const std::vector<yType>& values,
+            const SecondDerivativeType& z_0,
+            const SecondDerivativeType& z_n,
+            ) : nodes_(nodes), values_(values){
+                std::vector<SecondDerivativeType> z_inner = inner_second_derivatives<>
+            }
+};

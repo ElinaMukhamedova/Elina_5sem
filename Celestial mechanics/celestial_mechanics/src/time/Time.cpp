@@ -67,5 +67,3 @@ double Time::mjd() const noexcept {
     double mjd_frac = jdFrac_ - .5;
     return mjd_int + mjd_frac;
 }
-
-Exception::Exception(std::string error) : error_(error) {}

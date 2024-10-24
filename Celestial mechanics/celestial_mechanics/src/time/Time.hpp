@@ -20,22 +20,16 @@ class Time {
         auto operator<=>(const Time& other) const noexcept = default;
 };
 
-class Duration {
-    double ticks;
-    //MeasureType measure;
+class Exception : public std::exception {
+    char * error_;
 
     public:
-        double seconds() const noexcept;
+        Exception(char * error) : error_(error){};
+        char * what() {return error_;};
 };
 
+double operator-(const Time& first, const Time& second) noexcept;
+Time operator-(const Time& point, double duration) noexcept;
+Time operator+(const Time& point, double duration) noexcept;
 
-class Exception {
-    std::string error_;
-
-    public:
-        Exception(std::string error);
-};
-
-Duration operator-(const Time& first, const Time& second) noexcept;
-Time operator-(const Time& point, Duration vect) noexcept;
-Time operator+(const Time& point, Duration vect) noexcept;
+enum class Scale{UTC = 0, UT1 = 1};

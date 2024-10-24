@@ -9,5 +9,5 @@ add_subdirectory(tests)
 add_executable(celestial_mechanics_main main.cpp)
 
 target_link_libraries(celestial_mechanics_main sofa)
-#target_link_libraries(celestial_mechanics_main GeographicLib`)
+target_link_libraries(celestial_mechanics_main GeographicLib)
 target_link_libraries(celestial_mechanics_main time)

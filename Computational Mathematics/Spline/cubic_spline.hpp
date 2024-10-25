@@ -17,8 +17,8 @@ class CubicSplineMatrix {
             }
             diagonal_.push_back(2 * (h[n - 2] + h[n - 1]));
         }
-        std::vector<Type> getEdge_() const {return edge_;}
-        std::vector<Type> getDiagonal_() const {return diagonal_;}
+        std::vector<Type> getEdge_() const {return edge_;} // better to name it "Edge"
+        std::vector<Type> getDiagonal_() const {return diagonal_;} // better to name it "Diagonal"
 };
 
 template <typename numeratorType, typename denominatorType>

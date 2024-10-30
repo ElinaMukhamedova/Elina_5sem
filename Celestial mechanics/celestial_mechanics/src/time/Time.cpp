@@ -8,8 +8,8 @@ Time::Time(double jd1, double jd2) noexcept{
     double jd1_frac = std::modf(jd1, &jd1_int);
     double jd2_int;
     double jd2_frac = std::modf(jd2, &jd2_int);
-    jdInt_ = jd1_int + jd2_int;
-    jdFrac_ = jd1_frac + jd2_frac;
+    jdFrac_ = std::modf(jd1_frac + jd2_frac, &jdInt_);
+    jdInt_ += jd1_int + jd2_int;
 }
 
 Time Time::fromJD(double jd) noexcept {
@@ -66,4 +66,22 @@ double Time::mjd() const noexcept {
     double mjd_int = jdInt_ - 2400000;
     double mjd_frac = jdFrac_ - .5;
     return mjd_int + mjd_frac;
+}
+
+double operator-(const Time& first, const Time& second) noexcept {
+    double delta_int = first.jdInt() - second.jdInt();
+    double delta_frac = first.jdFrac() - second.jdFrac();
+    return delta_int + delta_frac;
+}
+
+Time operator-(const Time& point, double delta) noexcept {
+    double delta_int;
+    double delta_frac = std::modf(delta, &delta_int);
+    return Time(point.jdInt() - delta_int, point.jdFrac() - delta_frac);
+}
+
+Time operator+(const Time& point, double delta) noexcept {
+    double delta_int;
+    double delta_frac = std::modf(delta, &delta_int);
+    return Time(point.jdInt() + delta_int, point.jdFrac() + delta_frac);
 }

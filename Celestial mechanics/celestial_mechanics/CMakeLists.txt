@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(src)
 add_subdirectory(third_party)
+
+enable_testing()
 add_subdirectory(tests)
 
 add_executable(celestial_mechanics_main main.cpp)

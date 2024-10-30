@@ -21,15 +21,15 @@ class Time {
 };
 
 class Exception : public std::exception {
-    char * error_;
+    const char * error_;
 
     public:
-        Exception(char * error) : error_(error){};
-        char * what() {return error_;};
+        Exception(const char * error) : error_(error){};
+        const char * what() {return error_;};
 };
 
 double operator-(const Time& first, const Time& second) noexcept;
-Time operator-(const Time& point, double duration) noexcept;
-Time operator+(const Time& point, double duration) noexcept;
+Time operator-(const Time& point, double delta) noexcept;
+Time operator+(const Time& point, double delta) noexcept;
 
 enum class Scale{UTC = 0, UT1 = 1};

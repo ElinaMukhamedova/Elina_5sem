@@ -29,43 +29,43 @@ class TimeTest : public testing::Test {
 TEST_F(TimeTest, fromJDWorks) {
     JD = Time::fromJD(jd);
     EXPECT_EQ(JD.jdInt(), 2454526);
-    EXPECT_NEAR(JD.jdFrac(), 0.499999, 0.000001);
-    EXPECT_NEAR(JD.jd(), 2454526.499999, 0.000001);
-    EXPECT_NEAR(JD.mjd(), 54525.999999, 0.000001);
+    EXPECT_NEAR(JD.jdFrac(), 0.499999, 1e-6);
+    EXPECT_NEAR(JD.jd(), 2454526.499999, 1e-6);
+    EXPECT_NEAR(JD.mjd(), 54525.999999, 1e-6);
 
     JD_2 = Time::fromJD(jd_2);
     EXPECT_EQ(JD_2.jdInt(), 2454526);
-    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 0.000001);
-    EXPECT_NEAR(JD_2.jd(), 2454526.749999, 0.000001);
-    EXPECT_NEAR(JD_2.mjd(), 54526.249999, 0.000001);
+    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 1e-6);
+    EXPECT_NEAR(JD_2.jd(), 2454526.749999, 1e-6);
+    EXPECT_NEAR(JD_2.mjd(), 54526.249999, 1e-6);
 }
 
 TEST_F(TimeTest, fromMJDWorks) {
     JD = Time::fromMJD(mjd);
     EXPECT_EQ(JD.jdInt(), 2454526);
-    EXPECT_NEAR(JD.jdFrac(), 0.499999, 0.000001);
-    EXPECT_NEAR(JD.jd(), 2454526.499999, 0.000001);
-    EXPECT_NEAR(JD.mjd(), 54525.999999, 0.000001);
+    EXPECT_NEAR(JD.jdFrac(), 0.499999, 1e-6);
+    EXPECT_NEAR(JD.jd(), 2454526.499999, 1e-6);
+    EXPECT_NEAR(JD.mjd(), 54525.999999, 1e-6);
 
     JD_2 = Time::fromMJD(mjd_2);
     EXPECT_EQ(JD_2.jdInt(), 2454526);
-    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 0.000001);
-    EXPECT_NEAR(JD_2.jd(), 2454526.749999, 0.000001);
-    EXPECT_NEAR(JD_2.mjd(), 54526.249999, 0.000001);
+    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 1e-6);
+    EXPECT_NEAR(JD_2.jd(), 2454526.749999, 1e-6);
+    EXPECT_NEAR(JD_2.mjd(), 54526.249999, 1e-6);
 }
 
 TEST_F(TimeTest, fromCalendarWorks) {
     JD = Time::fromCalendar(iy, im, id, ihour, imin, sec);
     EXPECT_EQ(JD.jdInt(), 2454526);
-    EXPECT_NEAR(JD.jdFrac(), 0.499999, 0.000001);
-    EXPECT_NEAR(JD.jd(), 2454526.499999, 0.000001);
-    EXPECT_NEAR(JD.mjd(), 54525.999999, 0.000001);
+    EXPECT_NEAR(JD.jdFrac(), 0.499999, 1e-6);
+    EXPECT_NEAR(JD.jd(), 2454526.499999, 1e-6);
+    EXPECT_NEAR(JD.mjd(), 54525.999999, 1e-6);
 
     JD_2 = Time::fromCalendar(iy_2, im_2, id_2, ihour_2, imin_2, sec_2);
     EXPECT_EQ(JD_2.jdInt(), 2454526);
-    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 0.000001);
-    EXPECT_NEAR(JD_2.jd(), 2454526.749999, 0.000001);
-    EXPECT_NEAR(JD_2.mjd(), 54526.249999, 0.000001);
+    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 1e-6);
+    EXPECT_NEAR(JD_2.jd(), 2454526.749999, 1e-6);
+    EXPECT_NEAR(JD_2.mjd(), 54526.249999, 1e-6);
 }
 
 TEST_F(TimeTest, comparisonWorks) {
@@ -81,4 +81,11 @@ TEST_F(TimeTest, comparisonWorks) {
     EXPECT_FALSE(JD >= JD_2);
     EXPECT_FALSE(JD > JD_2);
     EXPECT_FALSE(JD == JD_2);
+}
+
+TEST_F(TimeTest, operatorsWork) {
+    JD = Time::fromJD(jd); JD_2 = Time::fromJD(jd_2);
+    EXPECT_NEAR(JD_2 - JD, 0.25, 1e-6);
+    EXPECT_TRUE(JD + 0.25 == JD_2);
+    EXPECT_TRUE(JD_2 - 0.25 == JD);
 }

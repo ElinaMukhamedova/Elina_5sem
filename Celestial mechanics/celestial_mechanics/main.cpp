@@ -1,9 +1,10 @@
 #include <iostream>
+#include <vector>
 #include <time/Time.hpp>
+#include <time/rapidcsv.h>
 
 int main() {
-    Time today = Time::fromCalendar(2024, 10, 7, 20, 49, 13);
-    std::cout << today.jdFrac() << std::endl;
+    rapidcsv::Document doc = rapidcsv::Document("/Users/elinamukhamedova/Desktop/C++/Elina_5sem/Celestial mechanics/celestial_mechanics/dut.csv");
 
     return 0;
 }

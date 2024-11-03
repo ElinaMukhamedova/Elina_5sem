@@ -2,8 +2,11 @@ file(GLOB_RECURSE TEST_FILES test_*.cpp)
 
 foreach (FILE IN LISTS TEST_FILES)
     get_filename_component(EXE_NAME ${FILE} NAME_WE)
-    add_executable(${EXE_NAME} ${FILE})
-    target_link_libraries(${EXE_NAME} time gtest gtest_main)
-    target_include_directories(${EXE_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/data")
-    add_test(NAME ${EXE_NAME} COMMAND ${EXE_NAME})
+    set(EXECUTABLE_NAME run_${EXE_NAME})
+
+    add_executable(${EXECUTABLE_NAME} ${FILE} Paths.cpp)
+
+    target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${PROJECT_NAME} gtest gtest_main sofa)
+    target_include_directories(${EXECUTABLE_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")
+    add_test(NAME ${EXECUTABLE_NAME} COMMAND ${EXECUTABLE_NAME})
 endforeach ()

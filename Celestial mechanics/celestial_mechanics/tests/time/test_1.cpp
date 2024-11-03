@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <time/Time.hpp>
+#include "celestial_mechanics/time/Time.hpp"
 
 class TimeTest : public testing::Test {
     protected:

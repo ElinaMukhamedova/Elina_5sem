@@ -1,4 +1,4 @@
-file(GLOB_RECURSE SOURCE *.cpp *.hpp *.h *.hpp)
+file(GLOB_RECURSE SOURCE *.cpp *.hpp *.h)
 
 add_library(${PROJECT_NAME} ${SOURCE})
 

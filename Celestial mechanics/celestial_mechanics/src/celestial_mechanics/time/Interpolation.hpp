@@ -1,27 +1,26 @@
 #include <vector>
 #include <cmath>
 #include <math.h>
+#include <algorithm>
 
 template<typename xType, typename yType>
-class NewtonInterpolant {
+class Interpolant {
 
     std::vector<xType> nodes_;
-    std::vector<yType> alpha_;
-    std::size_t N_;
+    std::vector<yType> values_;
 
     public:
-    NewtonInterpolant(const std::vector<xType>& nodes, const std::vector<yType>& values) : nodes_(nodes), alpha_(values), N_(values.size()){
-
-        for (int i = 0; i < N_; ++i) {
-            for (int j = N_ - 1; j > i; --j)
-                alpha_[j] = (alpha_[j] - alpha_[j - 1]) / (nodes_[j] - nodes_[j - i - 1]);
-        }
-    }
-    yType evaluate(const xType& x) const {
-        yType ans = alpha_[N_ - 1];
-        for (int i = N_ - 1; i > 0; --i) {
-            ans = ans * (x - nodes_[i - 1]) + alpha_[i - 1];
-        }
-        return ans;
+    Interpolant() {}
+    Interpolant(const std::vector<xType>& nodes, const std::vector<yType>& values) : nodes_(nodes), values_(values){}
+    yType evaluate(xType x) {
+        auto iter = std::lower_bound(nodes_.begin(), nodes_.end(), x);
+        int index = iter - nodes_.begin();
+        const bool condition = index != 0;
+        xType a = condition ? nodes_[index - 1] : nodes_[0];
+        xType b = condition ? *iter : nodes_[1];
+        yType value_a = condition ? values_[index - 1] : values_[0];
+        yType value_b = condition ? values_[index] : values_[1];
+        double slope = (value_b - value_a) / (b - a);
+        return slope * (x - a) + value_a;
     }
 };

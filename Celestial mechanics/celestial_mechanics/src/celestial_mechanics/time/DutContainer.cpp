@@ -30,6 +30,6 @@ std::vector<double> DutContainer::MJD_nodes() {return MJD_nodes_;}
 std::vector<double> DutContainer::dut_values() {return dut_values_;}
 
 double DutContainer::dut(double mjd) const {
-    NewtonInterpolant<double, double> interpolant(MJD_nodes_, dut_values_);
+    Interpolant<double, double> interpolant(MJD_nodes_, dut_values_);
     return interpolant.evaluate(mjd);
 }

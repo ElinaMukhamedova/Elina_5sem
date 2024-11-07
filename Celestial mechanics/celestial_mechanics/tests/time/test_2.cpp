@@ -1,6 +1,5 @@
 #include <gtest/gtest.h>
 #include "celestial_mechanics/time/DutContainer.hpp"
-#include "celestial_mechanics/time/Interpolation.hpp"
 #include <vector>
 #include <string>
 #include <cmath>
@@ -64,4 +63,16 @@ TEST(DutContainerTest, ConstructorWorks) {
     std::cout << dut.dut_values().size() << std::endl;
     EXPECT_TRUE(dut.MJD_nodes().size() == dut.N());
     EXPECT_TRUE(dut.dut_values().size() == dut.N());
+}
+
+TEST(DutContainerTest, CorrectValues) {
+    DutContainer dut = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
+    std::cout << dut.MJD_nodes()[13] << std::endl;
+    EXPECT_TRUE(dut.MJD_nodes()[13] == 37678);
+    std::cout << dut.dut_values()[13] << std::endl;
+    EXPECT_NEAR(dut.dut_values()[13], 0.0265403, 1e-12);
+    std::cout << dut.MJD_nodes()[dut.N() - 1] << std::endl;
+    EXPECT_TRUE(dut.MJD_nodes()[dut.N() - 1] == 59758);
+    std::cout << dut.dut_values()[dut.N() - 1] << std::endl;
+    EXPECT_NEAR(dut.dut_values()[dut.N() - 1], -0.0733645, 1e-12);
 }

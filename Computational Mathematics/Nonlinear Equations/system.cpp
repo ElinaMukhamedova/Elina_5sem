@@ -22,24 +22,24 @@ int main() {
     double x1_star = v_1[n1 - 1][0], y1_star = v_1[n1 - 1][1];
     std::vector<double> log10_errors_1;
     for (int i = 0; i < n1; ++i) {
-        log10_errors_1.push_back(std::log10(std::sqrt((x1_star - v_1[n1-1][i])*(x1_star - v_1[n1-1][i]) + (y1_star - v_1[n1-1][i])*(y1_star - v_1[n1-1][i]))));
+        log10_errors_1.push_back(std::log10(std::sqrt((x1_star - v_1[i][0])*(x1_star - v_1[i][0]) + (y1_star - v_1[i][1])*(y1_star - v_1[i][1]))));
     }
 
-    //for (double err : log10_errors_1)
-    //    std::cout << err << ", ";
-    //std::cout << std::endl;
+    for (double err : log10_errors_1)
+        std::cout << err << ", ";
+    std::cout << std::endl;
 
     std::vector<std::array<double, 2>> v_2 = solve<double, 2>(func_2, {-0.6, -0.8}, 1e-6, 50);
     unsigned int n2 = v_2.size();
     double x2_star = v_2[n2 - 1][0], y2_star = v_2[n2 - 1][1];
     std::vector<double> log10_errors_2;
     for (int i = 0; i < n2; ++i) {
-        log10_errors_2.push_back(std::log10(std::sqrt((x2_star - v_2[n2-1][i])*(x2_star - v_2[n2-1][i]) + (y2_star - v_2[n2-1][i])*(y2_star - v_2[n2-1][i]))));
+        log10_errors_2.push_back(std::log10(std::sqrt((x2_star - v_2[i][0])*(x2_star - v_2[i][0]) + (y2_star - v_2[i][1])*(y2_star - v_2[i][1]))));
     }
 
-    //for (double err : log10_errors_2)
-    //    std::cout << err << ", ";
-    //std::cout << std::endl;
+    for (double err : log10_errors_2)
+        std::cout << err << ", ";
+    std::cout << std::endl;
 
     std::cout << "x_positive = " << x1_star << "   " << "y_positive = "  << y1_star << std::endl;  
     std::cout << "x_negative = " << v_2[n2 - 1][0] << "   " << "y_negative = " << v_2[n2 - 1][1] << std::endl;

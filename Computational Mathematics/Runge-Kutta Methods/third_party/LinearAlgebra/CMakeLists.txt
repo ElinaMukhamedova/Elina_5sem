@@ -1,3 +1,3 @@
-file(GLOB_RECURSE SOURCE *.c *.h)
-add_library(eigen ${SOURCE})
-target_include_directories(eigen PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/eigen/Eigen")
+file(GLOB_RECURSE SOURCE *.h)
+add_library(Eigen INTERFACE ${SOURCE})
+target_include_directories(Eigen INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/Eigen")

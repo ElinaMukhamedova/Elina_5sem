@@ -1,7 +1,7 @@
 #include <array>
 #include <vector>
 #include <cmath>
-#include "Core"
+#include <Core>
 
 struct RK4Table {
     static constexpr unsigned int stages = 4;
@@ -11,7 +11,7 @@ struct RK4Table {
     static constexpr std::array<double, stages> bString = {(double)1/6, (double)1/3, (double)1/3, (double)1/6};
 };
 
-class Cubic {
+class CubicTime {
     public:
         static constexpr unsigned int dim = 1;
         using Argument = double;
@@ -22,6 +22,21 @@ class Cubic {
         };
         Eigen::Vector<double, dim> calc(const StateAndArg& stateAndArg) const {
             return Eigen::Vector<double, dim> {std::pow(stateAndArg.arg, 3)};
+        }
+};
+
+class Harmonic {
+    public:
+        static constexpr unsigned int dim = 2;
+        using Argument = double;
+        using State = Eigen::Vector<double, dim>;
+        struct StateAndArg {
+            State state;
+            Argument arg;
+        };
+        const Eigen::Matrix<double, dim, dim> f{{0, 1}, {-1, 0}};
+        Eigen::Vector<double, dim> calc(const StateAndArg& stateAndArg) const {
+            return Eigen::Vector<double, dim> {f * stateAndArg.state};
         }
 };
 

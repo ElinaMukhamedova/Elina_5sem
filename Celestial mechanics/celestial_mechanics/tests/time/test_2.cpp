@@ -58,11 +58,7 @@ TEST(DutContainerTest, SpaceSeparatorWorks) {
 
 TEST(DutContainerTest, ConstructorWorks) {
     DutContainer dut = DutContainer(resourcesPath() / "trimmed.csv", ' ');
-    std::cout << dut.N() << std::endl;
-    std::cout << dut.MJD_nodes().size() << std::endl;
-    std::cout << dut.dut_values().size() << std::endl;
-    EXPECT_TRUE(dut.MJD_nodes().size() == dut.N());
-    EXPECT_TRUE(dut.dut_values().size() == dut.N());
+    EXPECT_TRUE(dut.MJD_nodes().size() == dut.dut_values().size());
 }
 
 TEST(DutContainerTest, CorrectValues) {
@@ -71,8 +67,8 @@ TEST(DutContainerTest, CorrectValues) {
     EXPECT_TRUE(dut.MJD_nodes()[13] == 37678);
     std::cout << dut.dut_values()[13] << std::endl;
     EXPECT_NEAR(dut.dut_values()[13], 0.0265403, 1e-12);
-    std::cout << dut.MJD_nodes()[dut.N() - 1] << std::endl;
-    EXPECT_TRUE(dut.MJD_nodes()[dut.N() - 1] == 59758);
-    std::cout << dut.dut_values()[dut.N() - 1] << std::endl;
-    EXPECT_NEAR(dut.dut_values()[dut.N() - 1], -0.0733645, 1e-12);
+    std::cout << dut.MJD_nodes()[dut.dut_values().size() - 1] << std::endl;
+    EXPECT_TRUE(dut.MJD_nodes()[dut.dut_values().size() - 1] == 59758);
+    std::cout << dut.dut_values()[dut.dut_values().size() - 1] << std::endl;
+    EXPECT_NEAR(dut.dut_values()[dut.dut_values().size() - 1], -0.0733645, 1e-12);
 }

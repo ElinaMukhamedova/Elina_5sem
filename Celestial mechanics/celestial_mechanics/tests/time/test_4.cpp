@@ -16,7 +16,7 @@ class DutInterpolationTest : public testing::Test {
         dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
         MJD_nodes = dutContainer.MJD_nodes();
         dut_values = dutContainer.dut_values();
-        N = dutContainer.N();
+        N = dut_values.size();
         first_inner_point = MJD_nodes[0] + (MJD_nodes[1] - MJD_nodes[0]) / 3;
         first_inner_value = dut_values[0] + (dut_values[1] - dut_values[0]) / 3;
         last_inner_point = MJD_nodes[N-2] + 2 * (MJD_nodes[N-1] - MJD_nodes[N-2]) / 3;

@@ -1,7 +1,7 @@
 #include <array>
 #include <vector>
 #include <cmath>
-#include <EigenLib/Core>
+#include "Core"
 
 struct RK4Table {
     static constexpr unsigned int stages = 4;

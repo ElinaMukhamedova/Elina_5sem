@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <RungeKuttaMethods/classicRungeKutta.hpp>
+#include <RungeKuttaMethods/explicitRungeKutta.hpp>
 
 class RK4TableTest : public testing::Test {
     protected:

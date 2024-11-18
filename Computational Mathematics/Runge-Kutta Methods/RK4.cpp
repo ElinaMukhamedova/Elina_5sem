@@ -1,4 +1,4 @@
-#include <RungeKuttaMethods/classicRungeKutta.hpp>
+#include <RungeKuttaMethods/explicitRungeKutta.hpp>
 #include <iostream>
 
 int main() {

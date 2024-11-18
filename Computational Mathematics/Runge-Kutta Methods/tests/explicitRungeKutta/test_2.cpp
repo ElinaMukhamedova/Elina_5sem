@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <RungeKuttaMethods/classicRungeKutta.hpp>
+#include <RungeKuttaMethods/explicitRungeKutta.hpp>
 #include <Core>
 #include <cmath>
 

@@ -49,7 +49,7 @@ std::vector<typename RHS::StateAndArg> integrate (
         auto cColumn_ = Butcher_table.cColumn;
         auto stages_ = Butcher_table.stages;
         auto dim_ = rhs.dim;
-        std::array<Eigen::Vector<double, dim_>, stages_> Ks;
+        std::vector<typename RHS::State> Ks;
         std::vector<typename RHS::StateAndArg> solution;
         typename RHS::Argument currentTime = 0;
         typename RHS::State currentState = initialState;
@@ -60,15 +60,15 @@ std::vector<typename RHS::StateAndArg> integrate (
             currentStateAndArg.arg = currentTime;
             solution.push_back(currentStateAndArg);
 
-            Ks[0] = rhs.calc(currentStateAndArg);
+            Ks.push_back(rhs.calc(currentStateAndArg));
             for (std::size_t i = 1; i < stages_; ++i) {
-                Eigen::Vector<double, dim_> K_sum = Ks[0];
+                typename RHS::State K_sum = Ks[0];
                 for (std::size_t j = 0; j < i; ++j)
                     K_sum += aTable_[i][j] * Ks[j];
                 typename RHS::StateAndArg x;
                 x.state = currentState + step * K_sum;
                 x.arg = currentTime + step * cColumn_[i];
-                Ks[i] = rhs.calc(x);
+                Ks.push_back(rhs.calc(x));
             }
 
             nextState = currentState;

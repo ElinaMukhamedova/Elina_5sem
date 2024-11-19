@@ -49,17 +49,17 @@ std::vector<typename RHS::StateAndArg> integrate (
         auto cColumn_ = Butcher_table.cColumn;
         auto stages_ = Butcher_table.stages;
         auto dim_ = rhs.dim;
-        std::vector<typename RHS::State> Ks;
         std::vector<typename RHS::StateAndArg> solution;
         typename RHS::Argument currentTime = 0;
         typename RHS::State currentState = initialState;
         typename RHS::State nextState;
         typename RHS::StateAndArg currentStateAndArg;
-        while (currentTime < endTime) {
+        while (currentTime <= endTime) {
             currentStateAndArg.state = currentState;
             currentStateAndArg.arg = currentTime;
             solution.push_back(currentStateAndArg);
 
+            std::vector<typename RHS::State> Ks;
             Ks.push_back(rhs.calc(currentStateAndArg));
             for (std::size_t i = 1; i < stages_; ++i) {
                 typename RHS::State K_sum = Ks[0];

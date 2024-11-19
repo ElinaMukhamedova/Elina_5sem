@@ -62,8 +62,8 @@ std::vector<typename RHS::StateAndArg> integrate (
             std::vector<typename RHS::State> Ks;
             Ks.push_back(rhs.calc(currentStateAndArg));
             for (std::size_t i = 1; i < stages_; ++i) {
-                typename RHS::State K_sum = Ks[0];
-                for (std::size_t j = 0; j < i; ++j)
+                typename RHS::State K_sum = aTable_[i][0] * Ks[0];
+                for (std::size_t j = 1; j < i; ++j)
                     K_sum += aTable_[i][j] * Ks[j];
                 typename RHS::StateAndArg x;
                 x.state = currentState + step * K_sum;

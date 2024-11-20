@@ -43,11 +43,10 @@ std::vector<typename RHS::StateAndArg> integrate (
     const typename RHS::Argument& endTime,
     double step,
     const RHS& rhs) {
-        Table Butcher_table;
-        auto aTable_ = Butcher_table.aTable;
-        auto bString_ = Butcher_table.bString;
-        auto cColumn_ = Butcher_table.cColumn;
-        auto stages_ = Butcher_table.stages;
+        auto aTable_ = Table::aTable;
+        auto bString_ = Table::bString;
+        auto cColumn_ = Table::cColumn;
+        auto stages_ = Table::stages;
         auto dim_ = rhs.dim;
         std::vector<typename RHS::StateAndArg> solution;
         typename RHS::Argument currentTime = 0;
@@ -59,8 +58,8 @@ std::vector<typename RHS::StateAndArg> integrate (
             currentStateAndArg.arg = currentTime;
             solution.push_back(currentStateAndArg);
 
-            std::vector<typename RHS::State> Ks;
-            Ks.push_back(rhs.calc(currentStateAndArg));
+            std::array<typename RHS::State, Table::stages> Ks;
+            Ks[0] = rhs.calc(currentStateAndArg);
             for (std::size_t i = 1; i < stages_; ++i) {
                 typename RHS::State K_sum = aTable_[i][0] * Ks[0];
                 for (std::size_t j = 1; j < i; ++j)
@@ -68,7 +67,7 @@ std::vector<typename RHS::StateAndArg> integrate (
                 typename RHS::StateAndArg x;
                 x.state = currentState + step * K_sum;
                 x.arg = currentTime + step * cColumn_[i];
-                Ks.push_back(rhs.calc(x));
+                Ks[i] = rhs.calc(x);
             }
 
             nextState = currentState;

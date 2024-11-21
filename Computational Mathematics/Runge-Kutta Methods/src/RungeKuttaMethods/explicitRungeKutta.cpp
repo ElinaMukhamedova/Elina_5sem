@@ -6,5 +6,5 @@ Eigen::Vector<double, CubicTime::dim> CubicTime::calc(const CubicTime::StateAndA
 }
 
 Eigen::Vector<double, Harmonic::dim> Harmonic::calc(const Harmonic::StateAndArg& stateAndArg) const {
-    return Eigen::Vector<double, dim> {Harmonic::f * stateAndArg.state};
+    return Eigen::Vector<double, dim> {Harmonic::f * stateAndArg.state * std::pow(omega, 2)};
 }

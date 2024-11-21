@@ -30,6 +30,5 @@ const std::vector<double>& DutContainer::MJD_nodes() const {return MJD_nodes_;}
 const std::vector<double>& DutContainer::dut_values() const {return dut_values_;}
 
 double DutContainer::dut(double mjd) const {
-    Interpolant<double, double> interpolant(MJD_nodes_, dut_values_);
-    return interpolant.evaluate(mjd);
+    return interpolant_.evaluate(mjd);
 }

@@ -1,7 +1,9 @@
+#pragma once
+
 #include <compare>
 #include <vector>
 #include <cmath>
-#include "sofa.h"
+#include <sofa.h>
 #include "Exception.hpp"
 
 enum class Scale{UTC = 0, UT1 = 1};

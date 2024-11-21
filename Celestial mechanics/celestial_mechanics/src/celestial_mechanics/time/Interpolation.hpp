@@ -14,7 +14,7 @@ class Interpolant {
     public:
     Interpolant() {}
     Interpolant(const std::vector<xType>& nodes, const std::vector<yType>& values) : nodes_(nodes), values_(values){}
-    yType evaluate(xType x) {
+    yType evaluate(xType x) const {
         auto iter = std::lower_bound(nodes_.begin(), nodes_.end(), x);
         int index = iter - nodes_.begin();
         const bool condition = index != 0;

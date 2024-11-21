@@ -25,7 +25,10 @@ class CubicTime {
 };
 
 class Harmonic {
+    double omega;
+
     public:
+        Harmonic(double o = 1) : omega{o} {}
         static constexpr unsigned int dim = 2;
         using Argument = double;
         using State = Eigen::Vector<double, dim>;

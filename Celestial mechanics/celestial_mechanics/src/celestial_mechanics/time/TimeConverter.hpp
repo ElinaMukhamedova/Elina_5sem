@@ -68,4 +68,14 @@ class TimeConverter {
                 throw Exception("unacceptable date");
             return Time<Scale::UTC>(utc1, utc2);
         }
+
+        template<> Time<Scale::UT1> convert<Scale::UT1, Scale::TAI>(const Time<Scale::TAI>& from) const {
+            const auto utc = convert<Scale::UTC>(from);
+            return convert<Scale::UT1>(utc);
+        }
+
+        template<> Time<Scale::TAI> convert<Scale::TAI, Scale::UT1>(const Time<Scale::UT1>& from) const {
+            const auto utc = convert<Scale::UTC>(from);
+            return convert<Scale::TAI>(utc);
+        }
 };

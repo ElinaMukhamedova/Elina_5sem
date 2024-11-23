@@ -37,6 +37,10 @@ Time<scale>::Time(double jd1, double jd2) noexcept{
     double jd2_frac = std::modf(jd2, &jd2_int);
     jdFrac_ = std::modf(jd1_frac + jd2_frac, &jdInt_);
     jdInt_ += jd1_int + jd2_int;
+    if (jdFrac_ >= 0.5) {
+        jdFrac_ -= 1;
+        jdInt_ += 1;
+    }
 }
 
 template <Scale scale>
@@ -111,9 +115,7 @@ double operator-(const Time<scale>& first, const Time<scale>& second) noexcept {
 
 template<Scale scale>
 Time<scale> operator-(const Time<scale>& point, double delta) noexcept {
-    double delta_int;
-    double delta_frac = std::modf(delta, &delta_int);
-    return Time<scale>(point.jdInt() - delta_int, point.jdFrac() - delta_frac);
+    return Time<scale>::fromMJD(point.mjd() - delta);
 }
 
 template<Scale scale>

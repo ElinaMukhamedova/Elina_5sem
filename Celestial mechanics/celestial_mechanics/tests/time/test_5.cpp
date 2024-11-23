@@ -4,6 +4,7 @@
 #include "celestial_mechanics/time/TimeConverter.hpp"
 #include "tests/Paths.hpp"
 #include "resources/time_2019_2020_result.hpp"
+#include <iostream>
 
 class TimeConverterTest : public testing::Test {
     protected:
@@ -79,11 +80,13 @@ TEST_F(TimeConverterTest, TAItoTT) {
 
         ASSERT_DOUBLE_EQ(tt_fromTAI.jd(), el[7] + el[8]);
 
-        //const auto tt_true = Time<Scale::TT>(el[7], el[8]);
-        //ASSERT_TRUE(tt_fromTAI == tt_true);
+        const auto tt_true = Time<Scale::TT>(el[7], el[8]);
+        ASSERT_TRUE(tt_fromTAI == tt_true);
 
-        //ASSERT_DOUBLE_EQ(tt_fromTAI.jdInt(), el[7]);
-        //ASSERT_DOUBLE_EQ(tt_fromTAI.jdFrac(), el[8]);
+        std::cout << tt_fromTAI.jdInt() << " " << el[7] << std::endl;
+        std::cout << tt_fromTAI.jdFrac() << " " << el[8] << std::endl;
+        ASSERT_DOUBLE_EQ(tt_fromTAI.jdInt(), el[7]);
+        ASSERT_DOUBLE_EQ(tt_fromTAI.jdFrac(), el[8]);
     }
 }
 

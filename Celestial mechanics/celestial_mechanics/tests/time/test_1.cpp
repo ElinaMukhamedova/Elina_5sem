@@ -28,8 +28,8 @@ TEST_F(TimeTest, fromJDWorks) {
     EXPECT_NEAR(JD.mjd(), 54525.999999, 1e-6);
 
     const auto JD_2 = Time<Scale::UT1>::fromJD(jd_2);
-    EXPECT_EQ(JD_2.jdInt(), 2454526);
-    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 1e-6);
+    EXPECT_EQ(JD_2.jdInt(), 2454526 + 1);
+    EXPECT_NEAR(JD_2.jdFrac(), 0.749999 - 1, 1e-6);
     EXPECT_NEAR(JD_2.jd(), 2454526.749999, 1e-6);
     EXPECT_NEAR(JD_2.mjd(), 54526.249999, 1e-6);
 }
@@ -42,8 +42,8 @@ TEST_F(TimeTest, fromMJDWorks) {
     EXPECT_NEAR(JD.mjd(), 54525.999999, 1e-6);
 
     const auto JD_2 = Time<Scale::UT1>::fromMJD(mjd_2);
-    EXPECT_EQ(JD_2.jdInt(), 2454526);
-    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 1e-6);
+    EXPECT_EQ(JD_2.jdInt(), 2454526 + 1);
+    EXPECT_NEAR(JD_2.jdFrac(), 0.749999 - 1, 1e-6);
     EXPECT_NEAR(JD_2.jd(), 2454526.749999, 1e-6);
     EXPECT_NEAR(JD_2.mjd(), 54526.249999, 1e-6);
 }
@@ -56,8 +56,8 @@ TEST_F(TimeTest, fromCalendarWorks) {
     EXPECT_NEAR(JD.mjd(), 54525.999999, 1e-6);
 
     const auto JD_2 = Time<Scale::UT1>::fromCalendar(iy_2, im_2, id_2, ihour_2, imin_2, sec_2);
-    EXPECT_EQ(JD_2.jdInt(), 2454526);
-    EXPECT_NEAR(JD_2.jdFrac(), 0.749999, 1e-6);
+    EXPECT_EQ(JD_2.jdInt(), 2454526 + 1);
+    EXPECT_NEAR(JD_2.jdFrac(), 0.749999 - 1, 1e-6);
     EXPECT_NEAR(JD_2.jd(), 2454526.749999, 1e-6);
     EXPECT_NEAR(JD_2.mjd(), 54526.249999, 1e-6);
 }

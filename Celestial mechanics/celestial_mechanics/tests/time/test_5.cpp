@@ -71,3 +71,33 @@ TEST_F(TimeConverterTest, UT1toTAI) {
         ASSERT_NEAR(tai_fromUT1.jdFrac(), el[6], 1e-15);
     }
 }
+
+TEST_F(TimeConverterTest, TAItoTT) {
+    for (auto el : timeResult) {
+        const auto tai = Time<Scale::TAI>(el[5], el[6]);
+        const auto tt_fromTAI = timeConverter.convert<Scale::TT>(tai);
+
+        ASSERT_DOUBLE_EQ(tt_fromTAI.jd(), el[7] + el[8]);
+
+        //const auto tt_true = Time<Scale::TT>(el[7], el[8]);
+        //ASSERT_TRUE(tt_fromTAI == tt_true);
+
+        //ASSERT_DOUBLE_EQ(tt_fromTAI.jdInt(), el[7]);
+        //ASSERT_DOUBLE_EQ(tt_fromTAI.jdFrac(), el[8]);
+    }
+}
+
+TEST_F(TimeConverterTest, TTtoTAI) {
+    for (auto el : timeResult) {
+        const auto tt = Time<Scale::TT>(el[7], el[8]);
+        const auto tai_fromTT = timeConverter.convert<Scale::TAI>(tt);
+
+        ASSERT_DOUBLE_EQ(tai_fromTT.jd(), el[5] + el[6]);
+
+        //const auto tai_true = Time<Scale::TAI>(el[5], el[6]);
+        //ASSERT_TRUE(tai_fromTT == tai_true);
+
+        //ASSERT_DOUBLE_EQ(tai_fromTT.jdInt(), el[5]);
+        //ASSERT_DOUBLE_EQ(tai_fromTT.jdFrac(), el[6]);
+    }
+}

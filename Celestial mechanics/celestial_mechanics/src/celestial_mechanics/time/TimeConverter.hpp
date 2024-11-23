@@ -78,4 +78,16 @@ class TimeConverter {
             const auto utc = convert<Scale::UTC>(from);
             return convert<Scale::TAI>(utc);
         }
+
+        template<> Time<Scale::TT> convert<Scale::TT, Scale::TAI>(const Time<Scale::TAI>& from) const{
+            double tt1, tt2;
+            int j = iauTaitt(from.jdInt(), from.jdFrac(), &tt1, &tt2);
+            return Time<Scale::TT>(tt1, tt2);
+        }
+
+        template<> Time<Scale::TAI> convert<Scale::TAI, Scale::TT>(const Time<Scale::TT>& from) const {
+            double tai1, tai2;
+            int j = iauTttai(from.jdInt(), from.jdFrac(), &tai1, &tai2);
+            return Time<Scale::TAI>(tai1, tai2);
+        }
 };

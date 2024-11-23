@@ -7,13 +7,8 @@
 
 class TimeConverterTest : public testing::Test {
     protected:
-        DutContainer dutContainer;
-        TimeConverter<DutContainer> timeConverter;
-
-        void SetUp() {
-            dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
-            timeConverter = TimeConverter<DutContainer>(dutContainer);
-        }
+        DutContainer dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
+        TimeConverter<DutContainer> timeConverter = TimeConverter<DutContainer>(dutContainer);
 };
 
 TEST_F(TimeConverterTest, UTCtoUT1_testFromSOFA) {
@@ -29,5 +24,14 @@ TEST_F(TimeConverterTest, UTCtoUT1) {
         const auto ut1_fromUTC = timeConverter.convert<Scale::UT1>(utc);
         ASSERT_DOUBLE_EQ(ut1_fromUTC.jdInt(), el[1]);
         ASSERT_DOUBLE_EQ(ut1_fromUTC.jdFrac(), el[2]);
+    }
+}
+
+TEST_F(TimeConverterTest, UT1toUTC) {
+    for (auto el : timeResult) {
+        const auto ut1 = Time<Scale::UT1> (el[1], el[2]);
+        const auto utc_fromUT1 = timeConverter.convert<Scale::UTC>(ut1);
+        ASSERT_NEAR(utc_fromUT1.jdInt(), el[3], 1e-15);
+        ASSERT_NEAR(utc_fromUT1.jdFrac(), el[4], 1e-15);
     }
 }

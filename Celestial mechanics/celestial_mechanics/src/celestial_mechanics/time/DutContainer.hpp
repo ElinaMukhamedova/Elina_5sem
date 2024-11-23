@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <array>
 #include <string>
 #include <filesystem>
 #include "Interpolation.hpp"
@@ -11,7 +12,6 @@ class DutContainer {
     Interpolant<double, double> interpolant_;
 
     public:
-        DutContainer() {}
         DutContainer(const std::vector<double>& nodes, const std::vector<double>& values) : MJD_nodes_(nodes), dut_values_(values){
             interpolant_ = Interpolant<double, double>(MJD_nodes_, dut_values_);
         }
@@ -22,4 +22,6 @@ class DutContainer {
         const std::vector<double>& dut_values() const;
         
         double dut(double mjd) const;
+
+        const std::array<double, 2> MinMaxDerivative() const;
 };

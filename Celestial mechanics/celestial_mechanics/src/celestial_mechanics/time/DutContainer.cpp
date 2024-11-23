@@ -32,3 +32,18 @@ const std::vector<double>& DutContainer::dut_values() const {return dut_values_;
 double DutContainer::dut(double mjd) const {
     return interpolant_.evaluate(mjd);
 }
+
+const std::array<double, 2> DutContainer::MinMaxDerivative() const {
+    std::size_t n = MJD_nodes_.size();
+    double first_slope = (dut_values_[1] - dut_values_[0]) / (MJD_nodes_[1] - MJD_nodes_[0]);
+    double maxSlope = first_slope;
+    double minSlope = first_slope;
+    for (std::size_t i = 2; i < n; ++i) {
+        double slope = (dut_values_[i] - dut_values_[i-1]) / (MJD_nodes_[i] - MJD_nodes_[i - 1]);
+        if (slope > maxSlope)
+            maxSlope = slope;
+        if (slope < minSlope)
+            minSlope = slope;
+    }
+     return std::array<double, 2> {minSlope, maxSlope};
+}

@@ -6,14 +6,13 @@
 
 class DutInterpolationTest : public testing::Test {
     protected:
-    DutContainer dutContainer;
+    DutContainer dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
     std::vector<double> MJD_nodes;
     std::vector<double> dut_values;
     std::size_t N;
     double first_inner_point, first_inner_value;
     double last_inner_point, last_inner_value;
     void SetUp() {
-        dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
         MJD_nodes = dutContainer.MJD_nodes();
         dut_values = dutContainer.dut_values();
         N = dut_values.size();

@@ -90,4 +90,14 @@ class TimeConverter {
             int j = iauTttai(from.jdInt(), from.jdFrac(), &tai1, &tai2);
             return Time<Scale::TAI>(tai1, tai2);
         }
+
+        template<> Time<Scale::TT> convert<Scale::TT, Scale::UT1>(const Time<Scale::UT1>& from) const {
+            const auto tai = convert<Scale::TAI>(from);
+            return convert<Scale::TT>(tai);
+        }
+
+        template<> Time<Scale::UT1> convert<Scale::UT1, Scale::TT>(const Time<Scale::TT>& from) const {
+            const auto tai = convert<Scale::TAI>(from);
+            return convert<Scale::UT1>(tai);
+        }
 };

@@ -4,8 +4,8 @@
 #include "celestial_mechanics/time/TimeConverter.hpp"
 #include "tests/Paths.hpp"
 #include "resources/time_2019_2020_result.hpp"
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 class TimeConverterTest : public testing::Test {
     protected:
@@ -106,5 +106,29 @@ TEST_F(TimeConverterTest, TTtoTAI) {
 
         ASSERT_DOUBLE_EQ(tai_fromTT.jdInt(), el[5]);
         ASSERT_DOUBLE_EQ(tai_fromTT.jdFrac(), el[6]);
+    }
+}
+
+TEST_F(TimeConverterTest, UT1toTT) {
+    for (auto el : timeResult) {
+        const auto ut1 = Time<Scale::UT1>(el[1], el[2]);
+        const auto tt_fromUT1 = timeConverter.convert<Scale::TT>(ut1);
+        const auto tt_true = Time<Scale::TT>(el[7], el[8]);
+
+        if (std::abs(el[8]) == 0.5)
+            ASSERT_NEAR(std::abs(tt_fromUT1.jdFrac()), 0.5, 1e-15);
+        else {
+            ASSERT_NEAR(tt_fromUT1.jdInt(), el[7], 1e-15);
+            ASSERT_NEAR(tt_fromUT1.jdFrac(), el[8], 1e-15);
+        }
+    }
+}
+
+TEST_F(TimeConverterTest, TTtoUT1) {
+    for (auto el : timeResult) {
+        const auto tt = Time<Scale::TT>(el[7], el[8]);
+        const auto ut1_fromTT = timeConverter.convert<Scale::UT1>(tt);
+        ASSERT_DOUBLE_EQ(ut1_fromTT.jdInt(), el[1]);
+        ASSERT_DOUBLE_EQ(ut1_fromTT.jdFrac(), el[2]);
     }
 }

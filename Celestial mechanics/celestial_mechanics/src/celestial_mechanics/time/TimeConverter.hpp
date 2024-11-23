@@ -52,4 +52,20 @@ class TimeConverter {
 
             return utc_3;
         }
+
+        template<> Time<Scale::TAI> convert<Scale::TAI, Scale::UTC>(const Time<Scale::UTC>& from) const {
+            double tai1, tai2;
+            int j = iauUtctai(from.jdInt(), from.jdFrac(), &tai1, &tai2);
+            if (j == -1)
+                throw Exception("unacceptable date");
+            return Time<Scale::TAI>(tai1, tai2);
+        }
+
+        template<> Time<Scale::UTC> convert<Scale::UTC, Scale::TAI>(const Time<Scale::TAI>& from) const {
+            double utc1, utc2;
+            int j = iauTaiutc(from.jdInt(), from.jdFrac(), &utc1, &utc2);
+            if (j == -1)
+                throw Exception("unacceptable date");
+            return Time<Scale::UTC>(utc1, utc2);
+        }
 };

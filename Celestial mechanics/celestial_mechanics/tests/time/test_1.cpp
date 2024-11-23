@@ -86,3 +86,29 @@ TEST_F(TimeTest, operatorsWork) {
     EXPECT_TRUE(std::abs((JD_2 - 0.25) - JD) <= 1e-6);
     EXPECT_TRUE(JD_2 - 0.25 == JD);
 }
+
+TEST(jdFracTest, AbsoluteNotGreaterThanOneHalf) {
+    const auto utc1 = Time<Scale::UTC>(13, -0.5);
+    ASSERT_EQ(utc1.jdInt(), 12);
+    ASSERT_EQ(utc1.jdFrac(), 0.5);
+
+    const auto utc2 = Time<Scale::UTC>(17, 0.5);
+    ASSERT_EQ(utc2.jdInt(), 17);
+    ASSERT_EQ(utc2.jdFrac(), 0.5);
+
+    const auto utc3 = Time<Scale::UTC>(13, -0.4);
+    ASSERT_EQ(utc3.jdInt(), 13);
+    ASSERT_EQ(utc3.jdFrac(), -0.4);
+
+    const auto utc4 = Time<Scale::UTC>(17, 0.4);
+    ASSERT_EQ(utc4.jdInt(), 17);
+    ASSERT_EQ(utc4.jdFrac(), 0.4);
+
+    const auto utc5 = Time<Scale::UTC>(13, -0.6);
+    ASSERT_EQ(utc5.jdInt(), 12);
+    ASSERT_EQ(utc5.jdFrac(), 0.4);
+
+    const auto utc6 = Time<Scale::UTC>(17, 0.6);
+    ASSERT_EQ(utc6.jdInt(), 18);
+    ASSERT_EQ(utc6.jdFrac(), -0.4);
+}

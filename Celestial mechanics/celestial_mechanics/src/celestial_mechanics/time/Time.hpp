@@ -37,9 +37,13 @@ Time<scale>::Time(double jd1, double jd2) noexcept{
     double jd2_frac = std::modf(jd2, &jd2_int);
     jdFrac_ = std::modf(jd1_frac + jd2_frac, &jdInt_);
     jdInt_ += jd1_int + jd2_int;
-    if (jdFrac_ >= 0.5) {
+    if (jdFrac_ > 0.5) {
         jdFrac_ -= 1;
         jdInt_ += 1;
+    }
+    if (jdFrac_ <= -0.5) {
+        jdFrac_ += 1;
+        jdInt_ -= 1;
     }
 }
 

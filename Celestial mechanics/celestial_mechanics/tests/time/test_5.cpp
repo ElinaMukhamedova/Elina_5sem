@@ -5,6 +5,7 @@
 #include "tests/Paths.hpp"
 #include "resources/time_2019_2020_result.hpp"
 #include <iostream>
+#include <cmath>
 
 class TimeConverterTest : public testing::Test {
     protected:
@@ -80,13 +81,16 @@ TEST_F(TimeConverterTest, TAItoTT) {
 
         ASSERT_DOUBLE_EQ(tt_fromTAI.jd(), el[7] + el[8]);
 
+
         const auto tt_true = Time<Scale::TT>(el[7], el[8]);
         ASSERT_TRUE(tt_fromTAI == tt_true);
 
-        std::cout << tt_fromTAI.jdInt() << " " << el[7] << std::endl;
-        std::cout << tt_fromTAI.jdFrac() << " " << el[8] << std::endl;
-        ASSERT_DOUBLE_EQ(tt_fromTAI.jdInt(), el[7]);
-        ASSERT_DOUBLE_EQ(tt_fromTAI.jdFrac(), el[8]);
+        if (std::abs(el[8]) == 0.5)
+            ASSERT_DOUBLE_EQ(std::abs(tt_fromTAI.jdFrac()), 0.5);
+        else {
+            ASSERT_DOUBLE_EQ(tt_fromTAI.jdInt(), el[7]);
+            ASSERT_DOUBLE_EQ(tt_fromTAI.jdFrac(), el[8]);
+        }
     }
 }
 
@@ -97,10 +101,10 @@ TEST_F(TimeConverterTest, TTtoTAI) {
 
         ASSERT_DOUBLE_EQ(tai_fromTT.jd(), el[5] + el[6]);
 
-        //const auto tai_true = Time<Scale::TAI>(el[5], el[6]);
-        //ASSERT_TRUE(tai_fromTT == tai_true);
+        const auto tai_true = Time<Scale::TAI>(el[5], el[6]);
+        ASSERT_TRUE(tai_fromTT == tai_true);
 
-        //ASSERT_DOUBLE_EQ(tai_fromTT.jdInt(), el[5]);
-        //ASSERT_DOUBLE_EQ(tai_fromTT.jdFrac(), el[6]);
+        ASSERT_DOUBLE_EQ(tai_fromTT.jdInt(), el[5]);
+        ASSERT_DOUBLE_EQ(tai_fromTT.jdFrac(), el[6]);
     }
 }

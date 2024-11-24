@@ -182,3 +182,23 @@ TEST_F(TimeConverterTest, TCGtoTT) {
         }
     }
 }
+
+TEST_F(TimeConverterTest, UT1toTCG) {
+    for (auto el : timeResult) {
+        const auto ut1 = Time<Scale::UT1>(el[1], el[2]);
+        const auto tcg_fromUT1 = timeConverter.convert<Scale::TCG>(ut1);
+
+        ASSERT_NEAR(tcg_fromUT1.jdInt(), el[9], 1e-15);
+        ASSERT_NEAR(tcg_fromUT1.jdFrac(), el[10], 1e-15);
+    }
+}
+
+TEST_F(TimeConverterTest, TCGtoUT1) {
+    for (auto el : timeResult) {
+        const auto tcg = Time<Scale::TCG>(el[9], el[10]);
+        const auto ut1_fromTCG = timeConverter.convert<Scale::UT1>(tcg);
+
+        ASSERT_NEAR(ut1_fromTCG.jdInt(), el[1], 1e-16);
+        ASSERT_NEAR(ut1_fromTCG.jdFrac(), el[2], 1e-16);
+    }
+}

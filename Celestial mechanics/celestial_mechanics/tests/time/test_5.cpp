@@ -158,3 +158,27 @@ TEST_F(TimeConverterTest, TTtoUTC) {
         ASSERT_DOUBLE_EQ(utc_fromTT.jdFrac(), el[4]);
     }
 }
+
+TEST_F(TimeConverterTest, TTtoTCG) {
+    for (auto el : timeResult) {
+        const auto tt = Time<Scale::TT>(el[7], el[8]);
+        const auto tcg_fromTT = timeConverter.convert<Scale::TCG>(tt);
+
+        ASSERT_DOUBLE_EQ(tcg_fromTT.jdInt(), el[9]);
+        ASSERT_DOUBLE_EQ(tcg_fromTT.jdFrac(), el[10]);
+    }
+}
+
+TEST_F(TimeConverterTest, TCGtoTT) {
+    for (auto el : timeResult) {
+        const auto tcg = Time<Scale::TCG>(el[9], el[10]);
+        const auto tt_fromTCG = timeConverter.convert<Scale::TT>(tcg);
+
+        if (std::abs(el[8]) == 0.5)
+            ASSERT_NEAR(std::abs(tt_fromTCG.jdFrac()), 0.5, 1e-16);
+        else {
+            ASSERT_NEAR(tt_fromTCG.jdInt(), el[7], 1e-16);
+            ASSERT_NEAR(tt_fromTCG.jdFrac(), el[8], 1e-16);
+        }
+    }
+}

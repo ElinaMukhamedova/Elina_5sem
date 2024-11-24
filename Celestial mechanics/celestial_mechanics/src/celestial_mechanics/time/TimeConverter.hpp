@@ -110,4 +110,17 @@ class TimeConverter {
             const auto tai = convert<Scale::TAI>(from);
             return convert<Scale::UTC>(tai);
         }
+
+        template<> Time<Scale::TCG> convert<Scale::TCG, Scale::TT>(const Time<Scale::TT>& from) const {
+            double tcg1, tcg2;
+            int j = iauTttcg(from.jdInt(), from.jdFrac(), &tcg1, &tcg2);
+            return Time<Scale::TCG>(tcg1, tcg2);
+        }
+
+        template<> Time<Scale::TT> convert<Scale::TT, Scale::TCG>(const Time<Scale::TCG>& from) const {
+            double tt1, tt2;
+            int j = iauTcgtt(from.jdInt(), from.jdFrac(), &tt1, &tt2);
+            return Time<Scale::TT>(tt1, tt2);
+        }
+
 };

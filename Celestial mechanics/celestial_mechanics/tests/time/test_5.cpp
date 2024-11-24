@@ -222,3 +222,23 @@ TEST_F(TimeConverterTest, TCGtoUTC) {
         ASSERT_DOUBLE_EQ(utc_fromTCG.jdFrac(), el[4]);
     }
 }
+
+TEST_F(TimeConverterTest, TAItoTCG) {
+    for (auto el : timeResult) {
+        const auto tai = Time<Scale::TAI>(el[5], el[6]);
+        const auto tcg_fromTAI = timeConverter.convert<Scale::TCG>(tai);
+
+        ASSERT_DOUBLE_EQ(tcg_fromTAI.jdInt(), el[9]);
+        ASSERT_DOUBLE_EQ(tcg_fromTAI.jdFrac(), el[10]);
+    }
+}
+
+TEST_F(TimeConverterTest, TCGtoTAI) {
+    for (auto el : timeResult) {
+        const auto tcg = Time<Scale::TCG>(el[9], el[10]);
+        const auto tai_fromTCG = timeConverter.convert<Scale::TAI>(tcg);
+
+        ASSERT_DOUBLE_EQ(tai_fromTCG.jdInt(), el[5]);
+        ASSERT_DOUBLE_EQ(tai_fromTCG.jdFrac(), el[6]);
+    }
+}

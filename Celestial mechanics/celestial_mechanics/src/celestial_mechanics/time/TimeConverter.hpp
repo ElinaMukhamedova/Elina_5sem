@@ -142,4 +142,14 @@ class TimeConverter {
             const auto tt = convert<Scale::TT>(from);
             return convert<Scale::UTC>(tt);
         }
+
+        template<> Time<Scale::TCG> convert<Scale::TCG, Scale::TAI>(const Time<Scale::TAI>& from) const {
+            const auto tt = convert<Scale::TT>(from);
+            return convert<Scale::TCG>(tt);
+        }
+
+        template<> Time<Scale::TAI> convert<Scale::TAI, Scale::TCG>(const Time<Scale::TCG>& from) const {
+            const auto tt = convert<Scale::TT>(from);
+            return convert<Scale::TAI>(tt);
+        } 
 };

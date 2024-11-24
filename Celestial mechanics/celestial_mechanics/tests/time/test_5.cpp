@@ -242,3 +242,13 @@ TEST_F(TimeConverterTest, TCGtoTAI) {
         ASSERT_DOUBLE_EQ(tai_fromTCG.jdFrac(), el[6]);
     }
 }
+
+TEST_F(TimeConverterTest, TTtoTDB) {
+    for (auto el : timeResult) {
+        const auto tt = Time<Scale::TT>(el[7], el[8]);
+        const auto tdb_fromTT = timeConverter.convert<Scale::TDB>(tt);
+        
+        ASSERT_DOUBLE_EQ(tdb_fromTT.jdInt(), el[13]);
+        ASSERT_NEAR(tdb_fromTT.jdFrac(), el[14], 1e-2);
+    }
+}

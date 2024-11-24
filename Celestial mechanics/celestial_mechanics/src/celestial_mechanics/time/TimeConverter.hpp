@@ -151,5 +151,11 @@ class TimeConverter {
         template<> Time<Scale::TAI> convert<Scale::TAI, Scale::TCG>(const Time<Scale::TCG>& from) const {
             const auto tt = convert<Scale::TT>(from);
             return convert<Scale::TAI>(tt);
-        } 
+        }
+
+        template<> Time<Scale::TDB> convert<Scale::TDB, Scale::TT>(const Time<Scale::TT>& from) const {
+            double JD_tt = from.jd();
+            double g = 6.24 + 0.017202 * (JD_tt - 2451545);
+            return Time<Scale::TDB>::fromJD(JD_tt + 0.001657 * std::sin(g));
+        }
 };

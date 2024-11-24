@@ -161,4 +161,33 @@ class TimeConverter {
             return Time<Scale::TDB>(tdb1, tdb2);
         }
 
+        template<> Time<Scale::TT> convert<Scale::TT, Scale::TDB>(const Time<Scale::TDB>& from) const {
+            double tdb_int = from.jdInt();
+            double tdb_frac = from.jdFrac();
+            
+            const auto tt0 = Time<Scale::TT>(tdb_int, tdb_frac);
+            
+            double g0 = 6.24 + 0.017202 * (tt0.jd() - 2451545);
+            double dtr0 = 0.001657 * std::sin(g0);
+
+            double tt1_1, tt1_2;
+            int j1 = iauTdbtt(tdb_int, tdb_frac, dtr0, &tt1_1, &tt1_2);
+            const auto tt1 = Time<Scale::TT>(tt1_1, tt1_2);
+
+            double g1 = 6.24 + 0.017202 * (tt1.jd() - 2451545);
+            double dtr1 = 0.001657 * std::sin(g1);
+
+            double tt2_1, tt2_2;
+            int j2 = iauTdbtt(tdb_int, tdb_frac, dtr1, &tt2_1, &tt2_2);
+            const auto tt2 = Time<Scale::TT>(tt2_1, tt2_2);
+
+            double g2 = 6.24 + 0.017202 * (tt2.jd() - 2451545);
+            double dtr2 = 0.001657 * std::sin(g2);
+
+            double tt3_1, tt3_2;
+            int j3 = iauTdbtt(tdb_int, tdb_frac, dtr2, &tt3_1, &tt3_2);
+            const auto tt3 = Time<Scale::TT>(tt3_1, tt3_2);
+
+            return tt3;
+        }
 };

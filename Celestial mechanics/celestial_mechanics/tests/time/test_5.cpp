@@ -252,3 +252,17 @@ TEST_F(TimeConverterTest, TTtoTDB) {
         ASSERT_NEAR(tdb_fromTT.jdFrac(), el[14], 1e-9);
     }
 }
+
+TEST_F(TimeConverterTest, TDBtoTT) {
+    for (auto el : timeResult) {
+        const auto tdb = Time<Scale::TDB>(el[13], el[14]);
+        const auto tt_fromTDB = timeConverter.convert<Scale::TT>(tdb);
+
+        if (std::abs(el[8]) == 0.5)
+            ASSERT_NEAR(std::abs(tt_fromTDB.jdFrac()), 0.5, 1e-9);
+        else {
+            ASSERT_DOUBLE_EQ(tt_fromTDB.jdInt(), el[7]);
+            ASSERT_NEAR(tt_fromTDB.jdFrac(), el[8], 1e-9);
+        }
+    }
+}

@@ -202,3 +202,23 @@ TEST_F(TimeConverterTest, TCGtoUT1) {
         ASSERT_NEAR(ut1_fromTCG.jdFrac(), el[2], 1e-16);
     }
 }
+
+TEST_F(TimeConverterTest, UTCtoTCG) {
+    for (auto el : timeResult) {
+        const auto utc = Time<Scale::UTC>(el[3], el[4]);
+        const auto tcg_fromUTC = timeConverter.convert<Scale::TCG>(utc);
+
+        ASSERT_NEAR(tcg_fromUTC.jdInt(), el[9], 1e-16);
+        ASSERT_NEAR(tcg_fromUTC.jdFrac(), el[10], 1e-16);
+    }
+}
+
+TEST_F(TimeConverterTest, TCGtoUTC) {
+    for (auto el : timeResult) {
+        const auto tcg = Time<Scale::TCG>(el[9], el[10]);
+        const auto utc_fromTCG = timeConverter.convert<Scale::UTC>(tcg);
+
+        ASSERT_DOUBLE_EQ(utc_fromTCG.jdInt(), el[3]);
+        ASSERT_DOUBLE_EQ(utc_fromTCG.jdFrac(), el[4]);
+    }
+}

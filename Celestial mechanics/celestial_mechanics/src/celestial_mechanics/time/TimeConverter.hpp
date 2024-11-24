@@ -133,4 +133,13 @@ class TimeConverter {
             return convert<Scale::UT1>(tt);
         }
 
+        template<> Time<Scale::TCG> convert<Scale::TCG, Scale::UTC>(const Time<Scale::UTC>& from) const {
+            const auto tt = convert<Scale::TT>(from);
+            return convert<Scale::TCG>(tt);
+        }
+
+        template<> Time<Scale::UTC> convert<Scale::UTC, Scale::TCG>(const Time<Scale::TCG>& from) const {
+            const auto tt = convert<Scale::TT>(from);
+            return convert<Scale::UTC>(tt);
+        }
 };

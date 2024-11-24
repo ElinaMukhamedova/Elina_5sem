@@ -266,3 +266,13 @@ TEST_F(TimeConverterTest, TDBtoTT) {
         }
     }
 }
+
+TEST_F(TimeConverterTest, UT1toTDB) {
+    for (auto el : timeResult) {
+        const auto ut1 = Time<Scale::UT1>(el[1], el[2]);
+        const auto tdb_fromUT1 = timeConverter.convert<Scale::TDB, Scale::UT1>(ut1);
+
+        ASSERT_DOUBLE_EQ(tdb_fromUT1.jdInt(), el[13]);
+        ASSERT_NEAR(tdb_fromUT1.jdFrac(), el[14], 1e-9);
+    }
+}

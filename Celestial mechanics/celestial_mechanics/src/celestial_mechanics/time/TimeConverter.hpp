@@ -3,6 +3,7 @@
 #include <sofa.h>
 #include "Time.hpp"
 #include "Exception.hpp"
+#include <type_traits>
 
 template <typename DutContainer>
 class TimeConverter {
@@ -189,5 +190,11 @@ class TimeConverter {
             const auto tt3 = Time<Scale::TT>(tt3_1, tt3_2);
 
             return tt3;
+        }
+
+        template<Scale From>
+        Time<Scale::TDB> convert<Scale::TDB, typename std::enable_if<From == Scale::UT1 || From == Scale::UTC || From == Scale::TAI || From == Scale::TCG>::type>(const Time<From>& from) const {
+            const auto tt = Time<Scale::TT>(from);
+            return convert<Scale::TDB>(tt);
         }
 };

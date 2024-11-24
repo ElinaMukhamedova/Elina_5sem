@@ -7,7 +7,3 @@ add_subdirectory(third_party)
 
 enable_testing()
 add_subdirectory(tests)
-
-#add_executable(celestial_mechanics_main main.cpp)
-
-#target_link_libraries(celestial_mechanics_main PRIVATE sofa GeographicLib time)

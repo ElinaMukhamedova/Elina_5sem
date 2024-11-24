@@ -132,3 +132,29 @@ TEST_F(TimeConverterTest, TTtoUT1) {
         ASSERT_DOUBLE_EQ(ut1_fromTT.jdFrac(), el[2]);
     }
 }
+
+TEST_F(TimeConverterTest, UTCtoTT) {
+    for (auto el : timeResult) {
+        const auto utc = Time<Scale::UTC>(el[3], el[4]);
+        const auto tt_fromUTC = timeConverter.convert<Scale::TT>(utc);
+        
+        if (std::abs(el[8]) == 0.5)
+            ASSERT_NEAR(std::abs(tt_fromUTC.jdFrac()), 0.5, 1e-17);
+        else {
+            ASSERT_NEAR(tt_fromUTC.jdInt(), el[7], 1e-17);
+            ASSERT_NEAR(tt_fromUTC.jdFrac(), el[8], 1e-17);
+        }
+    }
+}
+
+TEST_F(TimeConverterTest, TTtoUTC) {
+    for (auto el : timeResult) {
+        const auto tt = Time<Scale::TT>(el[7], el[8]);
+        const auto utc_fromTT = timeConverter.convert<Scale::UTC>(tt);
+        const auto utc_true = Time<Scale::UTC>(el[3], el[4]);
+
+        ASSERT_TRUE(utc_fromTT == utc_true);
+        ASSERT_DOUBLE_EQ(utc_fromTT.jdInt(), el[3]);
+        ASSERT_DOUBLE_EQ(utc_fromTT.jdFrac(), el[4]);
+    }
+}

@@ -100,4 +100,14 @@ class TimeConverter {
             const auto tai = convert<Scale::TAI>(from);
             return convert<Scale::UT1>(tai);
         }
+
+        template<> Time<Scale::TT> convert<Scale::TT, Scale::UTC>(const Time<Scale::UTC>& from) const {
+            const auto tai = convert<Scale::TAI>(from);
+            return convert<Scale::TT>(tai);
+        }
+
+        template<> Time<Scale::UTC> convert<Scale::UTC, Scale::TT>(const Time<Scale::TT>& from) const {
+            const auto tai = convert<Scale::TAI>(from);
+            return convert<Scale::UTC>(tai);
+        }
 };

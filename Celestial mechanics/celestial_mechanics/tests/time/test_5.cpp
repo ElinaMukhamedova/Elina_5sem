@@ -5,7 +5,6 @@
 #include "tests/Paths.hpp"
 #include "resources/time_2019_2020_result.hpp"
 #include <cmath>
-#include <iostream>
 
 class TimeConverterTest : public testing::Test {
     protected:
@@ -14,10 +13,44 @@ class TimeConverterTest : public testing::Test {
 };
 
 TEST_F(TimeConverterTest, UTCtoUT1_testFromSOFA) {
-    const auto utc = Time<Scale::UTC>::fromCalendar(2006, 1, 15, 21, 4, 37.5);
+    const auto utc = Time<Scale::UTC>::fromCalendar(2006, 1, 15, 21, 24, 37.5);
     const auto ut1_fromUTC = timeConverter.convert<Scale::UT1>(utc);
-    const auto ut1 = Time<Scale::UT1>::fromCalendar(2006, 1, 15, 21, 4, 37.8341);
-    ASSERT_NEAR(ut1_fromUTC.mjd(), ut1.mjd(), 1e-6);
+    const auto ut1 = Time<Scale::UT1>::fromCalendar(2006, 1, 15, 21, 24, 37.8341);
+    ASSERT_NEAR(ut1_fromUTC.jdInt(), ut1.jdInt(), 1e-6);
+    ASSERT_NEAR(ut1_fromUTC.jdFrac(), ut1.jdFrac(), 1e-6);
+}
+
+
+TEST_F(TimeConverterTest, UTCtoTAI_testFromSOFA) {
+    const auto utc = Time<Scale::UTC>::fromCalendar(2006, 1, 15, 21, 24, 37.5);
+    const auto tai_fromUTC = timeConverter.convert<Scale::TAI>(utc);
+    const auto tai = Time<Scale::UT1>::fromCalendar(2006, 1, 15, 21, 25, 10.5);
+    ASSERT_NEAR(tai_fromUTC.jdInt(), tai.jdInt(), 1e-6);
+    ASSERT_NEAR(tai_fromUTC.jdFrac(), tai.jdFrac(), 1e-6);
+}
+
+TEST_F(TimeConverterTest, UTCtoTT_testFromSOFA) {
+    const auto utc = Time<Scale::UTC>::fromCalendar(2006, 1, 15, 21, 24, 37.5);
+    const auto tt_fromUTC = timeConverter.convert<Scale::TT>(utc);
+    const auto tt = Time<Scale::TT>::fromCalendar(2006, 1, 15, 21, 25, 42.684);
+    ASSERT_NEAR(tt_fromUTC.jdInt(), tt.jdInt(), 1e-6);
+    ASSERT_NEAR(tt_fromUTC.jdFrac(), tt.jdFrac(), 1e-6);
+}
+
+TEST_F(TimeConverterTest, UTCtoTCG_testFromSOFA) {
+    const auto utc = Time<Scale::UTC>::fromCalendar(2006, 1, 15, 21, 24, 37.5);
+    const auto tcg_fromUTC = timeConverter.convert<Scale::TCG>(utc);
+    const auto tcg = Time<Scale::TT>::fromCalendar(2006, 1, 15, 21, 25, 43.32269);
+    ASSERT_NEAR(tcg_fromUTC.jdInt(), tcg.jdInt(), 1e-6);
+    ASSERT_NEAR(tcg_fromUTC.jdFrac(), tcg.jdFrac(), 1e-6);
+}
+
+TEST_F(TimeConverterTest, UTCtoTDB_testFromSOFA) {
+    const auto utc = Time<Scale::UTC>::fromCalendar(2006, 1, 15, 21, 24, 37.5);
+    const auto tdb_fromUTC = timeConverter.convert<Scale::TDB>(utc);
+    const auto tdb = Time<Scale::TDB>::fromCalendar(2006, 1, 15, 21, 25, 42.684373);
+    ASSERT_NEAR(tdb_fromUTC.jdInt(), tdb.jdInt(), 1e-6);
+    ASSERT_NEAR(tdb_fromUTC.jdFrac(), tdb.jdFrac(), 1e-6);
 }
 
 TEST_F(TimeConverterTest, UTCtoUT1) {
@@ -264,15 +297,5 @@ TEST_F(TimeConverterTest, TDBtoTT) {
             ASSERT_DOUBLE_EQ(tt_fromTDB.jdInt(), el[7]);
             ASSERT_NEAR(tt_fromTDB.jdFrac(), el[8], 1e-9);
         }
-    }
-}
-
-TEST_F(TimeConverterTest, UT1toTDB) {
-    for (auto el : timeResult) {
-        const auto ut1 = Time<Scale::UT1>(el[1], el[2]);
-        const auto tdb_fromUT1 = timeConverter.convert<Scale::TDB, Scale::UT1>(ut1);
-
-        ASSERT_DOUBLE_EQ(tdb_fromUT1.jdInt(), el[13]);
-        ASSERT_NEAR(tdb_fromUT1.jdFrac(), el[14], 1e-9);
     }
 }

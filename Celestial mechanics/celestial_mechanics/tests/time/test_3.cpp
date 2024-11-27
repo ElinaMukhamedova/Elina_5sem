@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "celestial_mechanics/time/Interpolation.hpp"
+#include "celestial_mechanics/Interpolation.hpp"
 #include "celestial_mechanics/time/DutContainer.hpp"
 #include "tests/Paths.hpp"
 #include <vector>

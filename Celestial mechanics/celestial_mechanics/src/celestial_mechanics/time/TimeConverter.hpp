@@ -2,14 +2,14 @@
 
 #include <sofa.h>
 #include "Time.hpp"
-#include "Exception.hpp"
+#include "celestial_mechanics/Exception.hpp"
 #include <type_traits>
 
-template <typename DutContainer>
+template <typename SomeContainer>
 class TimeConverter {
-    DutContainer dutContainer_;
+    SomeContainer dutContainer_;
     public:
-        TimeConverter (const DutContainer& dutContainer) : dutContainer_(dutContainer) {};
+        TimeConverter (const SomeContainer& dutContainer) : dutContainer_(dutContainer) {};
         template<Scale To, Scale From> Time<To> convert(const Time<From>& from) const;
 
         template<> Time<Scale::UT1> convert<Scale::UT1, Scale::UTC>(const Time<Scale::UTC>& from) const {

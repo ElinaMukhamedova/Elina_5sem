@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include "celestial_mechanics/time/rapidcsv.h"
+#include "celestial_mechanics/rapidcsv.h"
 #include "tests/Paths.hpp"
 
 TEST(DutContainerTest, RapidcsvWorks) {

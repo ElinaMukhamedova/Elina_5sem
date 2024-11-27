@@ -4,7 +4,7 @@
 #include <array>
 #include <string>
 #include <filesystem>
-#include "Interpolation.hpp"
+#include "celestial_mechanics/Interpolation.hpp"
 
 class DutContainer {
     std::vector<double> MJD_nodes_;

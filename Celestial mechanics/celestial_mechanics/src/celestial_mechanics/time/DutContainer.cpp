@@ -1,8 +1,8 @@
 #include <string>
 #include <vector>
-#include "Interpolation.hpp"
+#include "celestial_mechanics/Interpolation.hpp"
 #include "DutContainer.hpp"
-#include "rapidcsv.h"
+#include "celestial_mechanics/rapidcsv.h"
 
 DutContainer::DutContainer(std::filesystem::path abs_path,
                         char separator,

@@ -29,10 +29,10 @@ EOPContainer::EOPContainer(std::filesystem::path abs_path,
     for (std::size_t i = 0; i < N; ++i){
         MJD_nodes_.push_back(MJD_column[i]);
         dut_values_.push_back(dut_column[i]);
-        dX_values_.push_back(dX_column[i]);
-        dY_values_.push_back(dY_column[i]);
-        xTerr_values_.push_back(xTerr_column[i]);
-        yTerr_values_.push_back(yTerr_column[i]);
+        dX_values_.push_back(dX_column[i] * 4.848136811095359935899141e-6);
+        dY_values_.push_back(dY_column[i] * 4.848136811095359935899141e-6);
+        xTerr_values_.push_back(xTerr_column[i] * 4.848136811095359935899141e-6);
+        yTerr_values_.push_back(yTerr_column[i] * 4.848136811095359935899141e-6);
     }
     
     dut_interpolant_ = Interpolant<double, double>(MJD_nodes_, dut_values_);

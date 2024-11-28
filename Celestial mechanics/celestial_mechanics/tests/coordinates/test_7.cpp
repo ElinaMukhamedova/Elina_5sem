@@ -19,8 +19,8 @@ TEST_F(ReferenceSystemConverterTest, 6700e3x_GCRStoITRSworks) {
 
     for (auto el : earthRotationResult) {
 
-        double jd = el[0];
-        const auto tt = Time<Scale::TT>::fromJD(jd);
+        double mjd = el[0];
+        const auto tt = Time<Scale::TT>::fromMJD(mjd);
         const auto utc = coordinatesConverter.timeConverter().convert<Scale::UTC>(tt);
 
         Eigen::Matrix<double, 3, 3> gcrs2itrs = coordinatesConverter.GCRStoITRS(utc);

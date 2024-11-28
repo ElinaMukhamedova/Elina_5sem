@@ -7,6 +7,8 @@
 #include "celestial_mechanics/time/TimeConverter.hpp"
 #include <array>
 #include "EOPContainer.hpp"
+#include <iomanip>
+#include <iostream>
 
 class ReferenceSystemConverter {
     EOPContainer EOPcontainer_;
@@ -35,6 +37,7 @@ class ReferenceSystemConverter {
         Eigen::Quaternion<double> rotateCIRStoTIRS(Time<Scale::UTC> utc) {
             const auto ut1 = timeConverter_.convert<Scale::UT1>(utc);
             double ERA = iauEra00(ut1.jdInt(), ut1.jdFrac());
+            std::cout << std::setprecision(15) << "ERA = " << ERA << std::endl;
             Eigen::Quaternion<double> IntermediateToTerrestrial(Eigen::AngleAxis<double>(-ERA, Eigen::Vector<double, 3>{0, 0, 1}));
             return IntermediateToTerrestrial;
         }

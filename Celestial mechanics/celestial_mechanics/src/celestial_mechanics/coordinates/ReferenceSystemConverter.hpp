@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core>
+//#include <Geometry>
 #include <sofa.h>
 #include "celestial_mechanics/time/Time.hpp"
 #include "celestial_mechanics/time/TimeConverter.hpp"
@@ -8,16 +9,16 @@
 #include "EOPContainer.hpp"
 
 class ReferenceSystemConverter {
-    EOPContainer EOPContainer_;
+    EOPContainer EOPcontainer_;
+    TimeConverter<EOPContainer> timeConverter_;
     public:
-        ReferenceSystemConverter (const EOPContainer& EOPContainer) : EOPContainer_(EOPContainer) {};
+        ReferenceSystemConverter (const EOPContainer& EOPcontainer) : EOPcontainer_(EOPcontainer), timeConverter_(EOPcontainer_) {}
 
         Eigen::Matrix<double, 3, 3> GCRStoCIRS(Time<Scale::UTC> utc) {
-            auto timeConverter = TimeConverter<EOPContainer>(EOPContainer_);
-            const auto tt = timeConverter.convert<Scale::TT>(utc);
+            const auto tt = timeConverter_.convert<Scale::TT>(utc);
             double tt1 = tt.jdInt(); double tt2 = tt.jdFrac();
-            double dX = EOPContainer_.dX(utc.mjd());
-            double dY = EOPContainer_.dY(utc.mjd());
+            double dX = EOPcontainer_.dX(utc.mjd());
+            double dY = EOPcontainer_.dY(utc.mjd());
             double X, Y;
             iauXy06(tt1, tt2, &X, &Y);
             double s = iauS06(tt1, tt2, X, Y);
@@ -27,5 +28,11 @@ class ReferenceSystemConverter {
                                                                 {c2i[1][0], c2i[1][1], c2i[1][2]},
                                                                 {c2i[2][0], c2i[2][1], c2i[2][2]}};
             return CelestialToIntermediate;
+        }
+
+        Eigen::Matrix<double, 3, 3> CIRStoTIRS(Time<Scale::UTC> utc) {
+            const auto ut1 = timeConverter_.convert<Scale::UT1>(utc);
+            double ERA = iauEra00(ut1.jdInt(), ut1.jdFrac());
+
         }
 };

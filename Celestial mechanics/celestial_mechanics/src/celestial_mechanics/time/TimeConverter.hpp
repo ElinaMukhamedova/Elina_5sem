@@ -9,7 +9,7 @@ template <typename SomeContainer>
 class TimeConverter {
     SomeContainer dutContainer_;
     public:
-        TimeConverter (const SomeContainer& dutContainer) : dutContainer_(dutContainer) {};
+        TimeConverter (const SomeContainer& dutContainer) : dutContainer_(dutContainer) {}
         template<Scale To, Scale From> Time<To> convert(const Time<From>& from) const;
 
         template<> Time<Scale::UT1> convert<Scale::UT1, Scale::UTC>(const Time<Scale::UTC>& from) const {

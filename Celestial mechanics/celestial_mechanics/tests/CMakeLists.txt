@@ -6,7 +6,7 @@ foreach (FILE IN LISTS TEST_FILES)
 
     add_executable(${EXECUTABLE_NAME} ${FILE} Paths.cpp)
 
-    target_link_libraries(${EXECUTABLE_NAME} PRIVATE ${PROJECT_NAME} gtest gtest_main sofa)
+    target_link_libraries(${EXECUTABLE_NAME} PUBLIC ${PROJECT_NAME} gtest gtest_main sofa Eigen)
     target_include_directories(${EXECUTABLE_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/..")
     add_test(NAME ${EXECUTABLE_NAME} COMMAND ${EXECUTABLE_NAME})
 endforeach ()

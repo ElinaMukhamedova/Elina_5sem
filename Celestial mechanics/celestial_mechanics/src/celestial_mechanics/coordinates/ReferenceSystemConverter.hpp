@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Core>
-//#include <Geometry>
+#include <Geometry>
 #include <sofa.h>
 #include "celestial_mechanics/time/Time.hpp"
 #include "celestial_mechanics/time/TimeConverter.hpp"
@@ -30,9 +30,9 @@ class ReferenceSystemConverter {
             return CelestialToIntermediate;
         }
 
-        Eigen::Matrix<double, 3, 3> CIRStoTIRS(Time<Scale::UTC> utc) {
+        Eigen::Quaternion<double> CIRStoTIRS(Time<Scale::UTC> utc) {
             const auto ut1 = timeConverter_.convert<Scale::UT1>(utc);
             double ERA = iauEra00(ut1.jdInt(), ut1.jdFrac());
-
+            
         }
 };

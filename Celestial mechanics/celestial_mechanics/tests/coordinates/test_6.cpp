@@ -66,7 +66,7 @@ TEST_F(ReferenceSystemConverterTestFromSOFA, GCRStoTIRSworks) {
         }
 }
 
-TEST_F(ReferenceSystemConverterTestFromSOFA, GCRStoITRSWorks) {
+TEST_F(ReferenceSystemConverterTestFromSOFA, GCRStoITRSworks) {
     Eigen::Matrix<double, 3, 3> gcrs2itrs = coordinatesConverter.GCRStoITRS(utc);
     Eigen::Matrix<double, 3, 3> withPolarMotion {{+0.973104317697536, +0.230363826239128, -0.000703163481769},
                                                 {-0.230363800456036, +0.973104570632801, +0.000118545368117},
@@ -74,5 +74,16 @@ TEST_F(ReferenceSystemConverterTestFromSOFA, GCRStoITRSWorks) {
     for (int i = 0; i < 3; ++i)
         for (int j = 0; j < 3; ++j) {
             ASSERT_NEAR(gcrs2itrs(i, j), withPolarMotion(i, j), 1e-14);
+        }
+}
+
+TEST_F(ReferenceSystemConverterTestFromSOFA, GCRS2ITRSworks) {
+    Eigen::Matrix<double, 3, 3> rc2i = coordinatesConverter.GCRS2ITRS(utc);
+    Eigen::Matrix<double, 3, 3> rc2i_true {{+0.973104317697536, +0.230363826239128, -0.000703163481769},
+                                                {-0.230363800456036, +0.973104570632801, +0.000118545368117},
+                                                {+0.000711560162594 ,+0.000046626402444, +0.999999745754024}};
+    for (int i = 0; i < 3; ++i)
+        for (int j = 0; j < 3; ++j) {
+            ASSERT_NEAR(rc2i(i, j), rc2i_true(i, j), 1e-14);
         }
 }

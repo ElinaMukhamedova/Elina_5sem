@@ -25,9 +25,14 @@ TEST_F(ReferenceSystemConverterTest, 6700e3x_GCRS2ITRSworks) {
 
         Eigen::Matrix<double, 3, 3> gcrs2itrs = coordinatesConverter.GCRS2ITRS(utc);
         Eigen::Vector<double, 3> r_ITRS = gcrs2itrs * r_GCRS;
+
         ASSERT_NEAR(r_ITRS(0), el[1], 0.1);
         ASSERT_NEAR(r_ITRS(1), el[2], 0.1);
         ASSERT_NEAR(r_ITRS(2), el[3], 0.1);
+
+        ASSERT_NEAR((r_ITRS(0) - el[1]) / el[1], 0, 1e-5);
+        ASSERT_NEAR((r_ITRS(1) - el[2]) / el[2], 0, 1e-5);
+        ASSERT_NEAR((r_ITRS(2) - el[3]) / el[3], 0, 1e-5);
     }
 }
 
@@ -43,6 +48,7 @@ TEST_F(ReferenceSystemConverterTest, 6700e3y_GCRS2ITRSworks) {
 
         Eigen::Matrix<double, 3, 3> gcrs2itrs = coordinatesConverter.GCRS2ITRS(utc);
         Eigen::Vector<double, 3> r_ITRS = gcrs2itrs * r_GCRS;
+
         ASSERT_NEAR(r_ITRS(0), el[4], 0.1);
         ASSERT_NEAR(r_ITRS(1), el[5], 0.1);
         ASSERT_NEAR(r_ITRS(2), el[6], 0.1);
@@ -61,6 +67,7 @@ TEST_F(ReferenceSystemConverterTest, 6700e3z_GCRS2ITRSworks) {
 
         Eigen::Matrix<double, 3, 3> gcrs2itrs = coordinatesConverter.GCRS2ITRS(utc);
         Eigen::Vector<double, 3> r_ITRS = gcrs2itrs * r_GCRS;
+
         ASSERT_NEAR(r_ITRS(0), el[7], 0.1);
         ASSERT_NEAR(r_ITRS(1), el[8], 0.1);
         ASSERT_NEAR(r_ITRS(2), el[9], 0.1);

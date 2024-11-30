@@ -34,7 +34,7 @@ class ReferenceSystemConverter {
             return CelestialToIntermediate;
         }
 
-        Eigen::Quaternion<double> rotateCIRStoTIRS(Time<Scale::UTC> utc) {
+        Eigen::Quaternion<double> rotationCIRStoTIRS(Time<Scale::UTC> utc) {
             const auto ut1 = timeConverter_.convert<Scale::UT1>(utc);
             double ERA = iauEra00(ut1.jdInt(), ut1.jdFrac());
             std::cout << std::setprecision(15) << "ERA = " << ERA << std::endl;
@@ -44,7 +44,7 @@ class ReferenceSystemConverter {
 
         Eigen::Quaternion<double> GCRStoTIRS(Time<Scale::UTC> utc) {
             Eigen::Quaternion<double> c2i = Eigen::Quaternion<double>(GCRStoCIRS(utc));
-            return rotateCIRStoTIRS(utc) * c2i;
+            return rotationCIRStoTIRS(utc) * c2i;
         }
 
         Eigen::Quaternion<double> PolarMotion(Time<Scale::UTC> utc) {

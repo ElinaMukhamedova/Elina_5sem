@@ -29,7 +29,7 @@ TEST_F(ReferenceSystemConverterTestFromSOFA, GCRStoCIRSworks) {
 }
 
 TEST_F(ReferenceSystemConverterTestFromSOFA, rotateCIRStoTIRSworks) {
-    const Eigen::Quaternion<double> intermediate2terrestrial = coordinatesConverter.rotateCIRStoTIRS(utc);
+    const Eigen::Quaternion<double> intermediate2terrestrial = coordinatesConverter.rotationCIRStoTIRS(utc);
     std::cout << intermediate2terrestrial << std::endl;
     const Eigen::Matrix<double, 3, 3> myR = intermediate2terrestrial.toRotationMatrix();
     const auto ut1 = coordinatesConverter.timeConverter().convert<Scale::UT1>(utc);

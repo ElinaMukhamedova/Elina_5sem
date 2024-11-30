@@ -38,7 +38,7 @@ int main() {
 
     std::cout << std::endl;
 
-    Eigen::Matrix<double, 3, 3> cirs2tirs = coordinatesConverter.rotateCIRStoTIRS(utc).toRotationMatrix();
+    Eigen::Matrix<double, 3, 3> cirs2tirs = coordinatesConverter.rotationCIRStoTIRS(utc).toRotationMatrix();
     std::cout << "CIRS to TIRS (intrinsic rotation) matrix:" << std::endl;
     std::cout << std::setprecision(17) << cirs2tirs << std::endl;
 

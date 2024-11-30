@@ -6,20 +6,12 @@
 
 class InterpolationTest : public testing::Test {
     protected:
-    std::vector<double> nodes;
-    std::vector<double> values;
-    std::size_t N;
-    Interpolant<double, double> interpolant;
-    std::vector<double> midpoints;
-    std::vector<double> values_midpoints;
-    void SetUp() {
-        nodes = {1, 3, 5, 7, 9, 11, 13};
-        values = {3, 7, 11, 15, 19, 23, 27};
-        N = nodes.size();
-        interpolant = Interpolant(nodes, values);
-        midpoints = {2, 4, 6, 8, 10, 12};
-        values_midpoints = {5, 9, 13, 17, 21, 25};
-    }
+    std::vector<double> nodes = {1, 3, 5, 7, 9, 11, 13};
+    std::vector<double> values = {3, 7, 11, 15, 19, 23, 27};
+    std::size_t N = nodes.size();
+    Interpolant<double, double> interpolant{nodes, values};
+    std::vector<double> midpoints = {2, 4, 6, 8, 10, 12};
+    std::vector<double> values_midpoints = {5, 9, 13, 17, 21, 25};
 };
 
 TEST_F(InterpolationTest, InterpolationAtNodesWorks) {
@@ -30,4 +22,16 @@ TEST_F(InterpolationTest, InterpolationAtNodesWorks) {
 TEST_F(InterpolationTest, InterpolationAtMidpointsWorks) {
     for (std::size_t i = 0; i < N - 1; ++i)
         EXPECT_NEAR(interpolant.evaluate(midpoints[i]), values_midpoints[i], 1e-12);
+}
+
+TEST(InterpolantTest, SingleNodeWorks) {
+    Interpolant<double, double> interpolant{{13}, {17}};
+    ASSERT_EQ(interpolant.evaluate(13), 17);
+}
+
+TEST(InterpolantTest, UnequalSizeWorks) {
+    Interpolant<double, double> interpolant1{{13, 17}, {21}};
+    Interpolant<double, double> interpolant2{{13}, {21, 17}};
+    ASSERT_EQ(interpolant1.evaluate(13), 21);
+    ASSERT_EQ(interpolant2.evaluate(13), 21);
 }

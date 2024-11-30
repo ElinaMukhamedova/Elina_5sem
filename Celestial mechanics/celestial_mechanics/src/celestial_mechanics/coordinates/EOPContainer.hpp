@@ -15,11 +15,11 @@ class EOPContainer {
     std::vector<double> xTerr_values_;
     std::vector<double> yTerr_values_;
 
-    Interpolant<double, double> dut_interpolant_;
-    Interpolant<double, double> dX_interpolant_;
-    Interpolant<double, double> dY_interpolant_;
-    Interpolant<double, double> xTerr_interpolant_;
-    Interpolant<double, double> yTerr_interpolant_;
+    Interpolant<double, double> dut_interpolant_{MJD_nodes_, dut_values_};
+    Interpolant<double, double> dX_interpolant_{MJD_nodes_, dX_values_};
+    Interpolant<double, double> dY_interpolant_{MJD_nodes_, dY_values_};
+    Interpolant<double, double> xTerr_interpolant_{MJD_nodes_, xTerr_values_};
+    Interpolant<double, double> yTerr_interpolant_{MJD_nodes_, yTerr_values_};
 
     public:
 
@@ -31,13 +31,7 @@ class EOPContainer {
                     const std::vector<double>& yTerr_values)
                         : MJD_nodes_(MJD_nodes), dut_values_(dut_values),
                         dX_values_(dX_values), dY_values_(dY_values),
-                        xTerr_values_(xTerr_values), yTerr_values_(yTerr_values){
-            dut_interpolant_ = Interpolant<double, double>(MJD_nodes_, dut_values_);
-            dX_interpolant_ = Interpolant<double, double>(MJD_nodes_, dX_values_);
-            dY_interpolant_ = Interpolant<double, double>(MJD_nodes_, dY_values_);
-            xTerr_interpolant_ = Interpolant<double, double>(MJD_nodes_, xTerr_values_);
-            yTerr_interpolant_ = Interpolant<double, double>(MJD_nodes_, yTerr_values_);
-        }
+                        xTerr_values_(xTerr_values), yTerr_values_(yTerr_values){}
         EOPContainer(std::filesystem::path abs_path,
                     char separator = ',',
                     std::string MJD_column_name = "mjd",

@@ -32,7 +32,10 @@ TEST(InterpolantTest, OutOfBoundsExceptionWorks) {
 }
 
 TEST(InterpolantDeathTest, ScarceNodes) {
-    ASSERT_THROW(auto interpolant = Interpolant<double, double>{{13, 17}, {21}}, Exception);
+    std::vector<double> nodes = {1, 3};
+    std::vector<double> values = {27};
+    #define init_list nodes, values
+    ASSERT_THROW(auto interpolant = Interpolant<double, double>(init_list), Exception);
 }
 
 //TEST(InterpolantTest, UnsortedNodesExceptionWorks) {

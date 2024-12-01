@@ -3,6 +3,7 @@
 #include "celestial_mechanics/time/DutContainer.hpp"
 #include "tests/Paths.hpp"
 #include <vector>
+#include "celestial_mechanics/Exception.hpp"
 
 class InterpolationTest : public testing::Test {
     protected:
@@ -24,14 +25,22 @@ TEST_F(InterpolationTest, InterpolationAtMidpointsWorks) {
         EXPECT_NEAR(interpolant.evaluate(midpoints[i]), values_midpoints[i], 1e-12);
 }
 
-TEST(InterpolantTest, SingleNodeWorks) {
-    Interpolant<double, double> interpolant{{13}, {17}};
-    ASSERT_EQ(interpolant.evaluate(13), 17);
+TEST(InterpolantTest, OutOfBoundsExceptionWorks) {
+    Interpolant<double, double> interpolant{{13, 15, 17}, {1, 2, 3, 5}};
+    ASSERT_THROW(interpolant.evaluate(21), Exception);
+    ASSERT_THROW(interpolant.evaluate(11), Exception);
 }
 
-TEST(InterpolantTest, UnequalSizeWorks) {
-    Interpolant<double, double> interpolant1{{13, 17}, {21}};
-    Interpolant<double, double> interpolant2{{13}, {21, 17}};
-    ASSERT_EQ(interpolant1.evaluate(13), 21);
-    ASSERT_EQ(interpolant2.evaluate(13), 21);
+TEST(InterpolantDeathTest, ScarceNodes) {
+    ASSERT_THROW(auto interpolant = Interpolant<double, double>{{13, 17}, {21}}, Exception);
 }
+
+//TEST(InterpolantTest, UnsortedNodesExceptionWorks) {
+//    Interpolant<double, double> interpolant{{13, 17, 15}, {1, 2, 3, 5}};
+//    ASSERT_THROW(interpolant.evaluate(13), Exception);
+//}
+
+//TEST(InterpolantTest, StrictUnsortedNodesExceptionWorks) {
+//    Interpolant<double, double> interpolant{{13, 17, 17}, {1, 2, 3, 5}};
+//    ASSERT_THROW(interpolant.evaluate(13), Exception);
+//}

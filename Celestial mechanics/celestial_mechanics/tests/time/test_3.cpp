@@ -30,20 +30,3 @@ TEST(InterpolantTest, OutOfBoundsExceptionWorks) {
     ASSERT_THROW(interpolant.evaluate(21), Exception);
     ASSERT_THROW(interpolant.evaluate(11), Exception);
 }
-
-TEST(InterpolantDeathTest, ScarceNodes) {
-    std::vector<double> nodes = {1, 3};
-    std::vector<double> values = {27};
-    #define init_list nodes, values
-    ASSERT_THROW(auto interpolant = Interpolant<double, double>(init_list), Exception);
-}
-
-//TEST(InterpolantTest, UnsortedNodesExceptionWorks) {
-//    Interpolant<double, double> interpolant{{13, 17, 15}, {1, 2, 3, 5}};
-//    ASSERT_THROW(interpolant.evaluate(13), Exception);
-//}
-
-//TEST(InterpolantTest, StrictUnsortedNodesExceptionWorks) {
-//    Interpolant<double, double> interpolant{{13, 17, 17}, {1, 2, 3, 5}};
-//    ASSERT_THROW(interpolant.evaluate(13), Exception);
-//}

@@ -1,12 +1,13 @@
 #include <gtest/gtest.h>
 #include "celestial_mechanics/Interpolation.hpp"
 #include "celestial_mechanics/time/DutContainer.hpp"
+#include "celestial_mechanics/rapidcsv.h"
 #include "tests/Paths.hpp"
 #include <vector>
 
 class DutInterpolationTest : public testing::Test {
     protected:
-    DutContainer dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
+    DutContainer dutContainer = DutContainer::buildFromFile(resourcesPath() / "earth_rotation.csv");
     std::vector<double> MJD_nodes;
     std::vector<double> dut_values;
     std::size_t N;

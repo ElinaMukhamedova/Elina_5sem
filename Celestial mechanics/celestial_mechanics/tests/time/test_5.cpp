@@ -8,7 +8,7 @@
 
 class TimeConverterTest : public testing::Test {
     protected:
-        DutContainer dutContainer = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
+        DutContainer dutContainer = DutContainer::buildFromFile(resourcesPath() / "earth_rotation.csv");
         TimeConverter<DutContainer> timeConverter = TimeConverter<DutContainer>(dutContainer);
 };
 

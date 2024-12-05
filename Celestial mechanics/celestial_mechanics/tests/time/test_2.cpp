@@ -5,6 +5,7 @@
 #include <cmath>
 #include "celestial_mechanics/rapidcsv.h"
 #include "tests/Paths.hpp"
+#include <filesystem>
 
 TEST(DutContainerTest, RapidcsvWorks) {
     std::cout << std::filesystem::current_path() << std::endl;
@@ -57,12 +58,12 @@ TEST(DutContainerTest, SpaceSeparatorWorks) {
 }
 
 TEST(DutContainerTest, ConstructorWorks) {
-    DutContainer dut = DutContainer(resourcesPath() / "trimmed.csv", ' ');
+    DutContainer dut = DutContainer::buildFromFile(resourcesPath() / "trimmed.csv", ' ', "MJD", "UT1-UTC");
     EXPECT_TRUE(dut.MJD_nodes().size() == dut.dut_values().size());
 }
 
 TEST(DutContainerTest, CorrectValues) {
-    DutContainer dut = DutContainer(resourcesPath() / "earth_rotation.csv", ',', "mjd", "UT1-UTC s");
+    DutContainer dut = DutContainer::buildFromFile(resourcesPath() / "earth_rotation.csv");
     std::cout << dut.MJD_nodes()[13] << std::endl;
     EXPECT_TRUE(dut.MJD_nodes()[13] == 37678);
     std::cout << dut.dut_values()[13] << std::endl;

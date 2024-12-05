@@ -5,7 +5,7 @@
 #include <string>
 #include "EOPContainer.hpp"
 
-EOPContainer::EOPContainer(std::filesystem::path abs_path,
+EOPContainer EOPContainer::buildFromFile(std::filesystem::path abs_path,
                     char separator,
                     std::string MJD_column_name,
                     std::string dut_column_name ,
@@ -26,20 +26,18 @@ EOPContainer::EOPContainer(std::filesystem::path abs_path,
     std::vector<double> yTerr_column = doc.GetColumn<double>(yTerr_column_name);
     std::size_t N = MJD_column.size();
 
+    std::vector<double> MJD_nodes, dut_values, dX_values, dY_values, xTerr_values, yTerr_values;
+
     for (std::size_t i = 0; i < N; ++i){
-        MJD_nodes_.push_back(MJD_column[i]);
-        dut_values_.push_back(dut_column[i]);
-        dX_values_.push_back(dX_column[i] * 4.848136811095359935899141e-6);
-        dY_values_.push_back(dY_column[i] * 4.848136811095359935899141e-6);
-        xTerr_values_.push_back(xTerr_column[i] * 4.848136811095359935899141e-6);
-        yTerr_values_.push_back(yTerr_column[i] * 4.848136811095359935899141e-6);
+        MJD_nodes.push_back(MJD_column[i]);
+        dut_values.push_back(dut_column[i]);
+        dX_values.push_back(dX_column[i] * 4.848136811095359935899141e-6);
+        dY_values.push_back(dY_column[i] * 4.848136811095359935899141e-6);
+        xTerr_values.push_back(xTerr_column[i] * 4.848136811095359935899141e-6);
+        yTerr_values.push_back(yTerr_column[i] * 4.848136811095359935899141e-6);
     }
     
-    dut_interpolant_ = Interpolant<double, double>(MJD_nodes_, dut_values_);
-    dX_interpolant_ = Interpolant<double, double>(MJD_nodes_, dX_values_);
-    dY_interpolant_ = Interpolant<double, double>(MJD_nodes_, dY_values_);
-    xTerr_interpolant_ = Interpolant<double, double>(MJD_nodes_, xTerr_values_);
-    yTerr_interpolant_ = Interpolant<double, double>(MJD_nodes_, yTerr_values_);
+    return EOPContainer(MJD_nodes, dut_values, dX_values, dY_values, xTerr_values, yTerr_values);
 }
 
 const std::vector<double>& EOPContainer::MJD_nodes() const {return MJD_nodes_;}

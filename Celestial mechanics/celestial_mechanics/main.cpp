@@ -31,7 +31,7 @@ int main() {
     std::cout << std::setprecision(17) << "xp = " << EOPcontainer.xTerr(utc.mjd()) << std::endl;
     std::cout << std::setprecision(17) << "yp = " << EOPcontainer.yTerr(utc.mjd()) << std::endl;
 
-    Eigen::Matrix<double, 3, 3> result = coordinatesConverter.GCRS2ITRS(tt);
+    Eigen::Quaternion<double> result = coordinatesConverter.GCRS2ITRS(tt);
     std::cout << "rc2t matrix:" << std::endl;
     std::cout << std::setprecision(17) << result << std::endl;
 

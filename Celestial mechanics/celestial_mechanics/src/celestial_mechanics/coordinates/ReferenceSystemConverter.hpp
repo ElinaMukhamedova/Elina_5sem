@@ -16,7 +16,7 @@ class ReferenceSystemConverter {
     public:
         ReferenceSystemConverter (const EOPContainer& EOPcontainer) : EOPcontainer_(EOPcontainer), timeConverter_(EOPcontainer_) {}
         
-        Eigen::Matrix<double, 3, 3> GCRS2ITRS(const Time<Scale::TT>& tt) {
+        Eigen::Quaternion<double> GCRS2ITRS(const Time<Scale::TT>& tt) {
             const auto utc = timeConverter_.convert<Scale::UTC>(tt);
             double utcMJD = utc.mjd();
 
@@ -39,8 +39,10 @@ class ReferenceSystemConverter {
             double rc2t[3][3];
             iauC2tcio(rc2i, era, rpom, rc2t);
 
-            return Eigen::Matrix<double, 3, 3> {{rc2t[0][0], rc2t[0][1], rc2t[0][2]},
-                                                {rc2t[1][0], rc2t[1][1], rc2t[1][2]},
-                                                {rc2t[2][0], rc2t[2][1], rc2t[2][2]}};
+            Eigen::Matrix<double, 3, 3> rc2tMatrix{{rc2t[0][0], rc2t[0][1], rc2t[0][2]},
+                                                    {rc2t[1][0], rc2t[1][1], rc2t[1][2]},
+                                                    {rc2t[2][0], rc2t[2][1], rc2t[2][2]}};
+
+            return Eigen::Quaternion<double>{rc2tMatrix};
         }
 };

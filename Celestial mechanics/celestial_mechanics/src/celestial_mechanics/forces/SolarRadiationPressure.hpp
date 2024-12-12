@@ -6,15 +6,16 @@
 #include <string>
 #include <cmath>
 #include "TSIcontainer.hpp"
+#include "Evig.hpp"
 
 class SolarRadiationPressure {
 
-    std::string pathEphemerides_;
+    Evig evig_;
     TSIcontainer TSIcontainer_;
 
     public:
-        SolarRadiationPressure(const std::string& pathEphemerides, TSIcontainer& TSI)
-            : pathEphemerides_(pathEphemerides), TSIcontainer_(TSI) {}
+        SolarRadiationPressure(Evig& evig, TSIcontainer& TSI)
+            : evig_(evig), TSIcontainer_(TSI) {}
 
         struct SatelliteParameters {
             double S_srp;
@@ -24,57 +25,47 @@ class SolarRadiationPressure {
         Eigen::Vector3d calcAcceleration(const Eigen::Vector3d& positionECI, const Eigen::Vector3d& velocityECI,
                                             const double mass, const SatelliteParameters& satParams,
                                                 const Params& params){
+
+            const Eigen::Quaternion eci2ICRF = params.eci2icrf;
             Time<Scale::TDB> tdb = params.tdb;
-            double jdInt = tdb.jdInt(); double jdFrac = tdb.jdFrac();
-            
             double tsi = TSIcontainer_.tsi(tdb);
 
-            int res = calceph_sopen(pathEphemerides_.c_str());
+            const double AU = 149597870700;
+            const double rEarthAU = 6378140 / AU;
+            const double rMoonAU = 1737400 / AU;
+            const double lightSpeed = 299792458;
+            
+            Eigen::Vector3d SunEarth = evig_.vector<Himmellegeme::Sola, Himmellegeme::Jorden>(tdb);
+            Eigen::Vector3d EarthSun = -SunEarth;
 
-            if (res) {
-                double helioEarth[6];
-                calceph_scompute(jdInt, jdFrac, 3, 11, helioEarth);
+            Eigen::Vector3d SunMoon = evig_.vector<Himmellegeme::Sola, Himmellegeme::Månen>(tdb);
+            Eigen::Vector3d MoonSun = -SunMoon;
+            
+            Eigen::Vector3d EarthSatellite = eci2icrf._transformVector(positionECI);
+            Eigen::Vector3d MoonSatellite = MoonSun + SunEarth + positionECI;
 
-                Eigen::Vector3d SunEarth{helioEarth[0], helioEarth[1], helioEarth[2]};
-                Eigen::Vector3d EarthSun{-helioEarth[0], -helioEarth[1], -helioEarth[2]};
-
-                double helioMoon[6];
-                calceph_scompute(jdInt, jdFrac, 10, 11, helioMoon);
-
-                Eigen::Vector3d SunMoon{helioMoon[0], helioMoon[1], helioMoon[2]};
-                Eigen::Vector3d MoonSun{-helioMoon[0], -helioMoon[1], -helioMoon[2]};
-
-                Eigen::Vector3d MoonSatellite = MoonSun + SunEarth + positionECI;
-
-                int shadow = 1;
-                if (EarthSun.dot(positionECI) <= 0) {
-                    double numeratorEarth = (EarthSun.cross(positionECI)).norm();
-                    double denominatorEarth = positionECI.norm();
-                    double rhoEarth = numeratorEarth / denominatorEarth;
-                    if (rhoEarth < 6378140)
-                        shadow = 0;
-                }
-                if (MoonSun.dot(MoonSatellite) <= 0) {
-                    double numeratorMoon = (MoonSun.cross(MoonSatellite)).norm();
-                    double denominatorMoon = MoonSatellite.norm();
-                    double rhoMoon = numeratorMoon / denominatorMoon;
-                    if (rhoMoon < 1737400)
-                        shadow = 0;
-                }
-
-                Eigen::Vector3d SunSatellite = SunEarth + positionECI;
-                Eigen::Vector3d n = SunSatellite.normalized();
-                double SunSatelliteDistance = SunSatellite.norm();
-                const double AU = 149597870700;
-                Eigen::Vector3d j0 = tsi * std::pow(AU/SunSatelliteDistance, 2) * n;
-
-                Eigen::Vector3d F_srp = (shadow * satParams.S_srp / 299792458) * j0;
-                
-                calceph_sclose();
+            int shadow = 1;
+            if (EarthSun.dot(EarthSatellite) <= 0) {
+                double numeratorEarth = (EarthSun.cross(EarthSatellite)).norm();
+                double denominatorEarth = EarthSatellite.norm();
+                double rhoEarth = numeratorEarth / denominatorEarth;
+                if (rhoEarth < rEarthAU)
+                    shadow = 0;
             }
-            else {
-                throw Exception("Can't open the ephemerides file!");
+            if (MoonSun.dot(MoonSatellite) <= 0) {
+                double numeratorMoon = (MoonSun.cross(MoonSatellite)).norm();
+                double denominatorMoon = MoonSatellite.norm();
+                double rhoMoon = numeratorMoon / denominatorMoon;
+                if (rhoMoon < rMoonAU)
+                    shadow = 0;
             }
+
+            Eigen::Vector3d SunSatellite = SunEarth + EarthSatellite;
+            Eigen::Vector3d n = SunSatellite.normalized();
+            double SunSatelliteDistance = SunSatellite.norm();
+            Eigen::Vector3d j0 = tsi * std::pow(AU/SunSatelliteDistance, 2) * n;
+
+            Eigen::Vector3d F_srp = (shadow * satParams.S_srp / lightSpeed) * j0;
 
             return F_srp / mass;
         }

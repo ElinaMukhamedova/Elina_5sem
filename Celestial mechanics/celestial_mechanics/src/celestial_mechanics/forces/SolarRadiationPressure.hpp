@@ -6,16 +6,16 @@
 #include <string>
 #include <cmath>
 #include "TSIcontainer.hpp"
-#include "Evig.hpp"
+#include "Eternal.hpp"
 
 class SolarRadiationPressure {
 
-    Evig evig_;
+    Eternal eternal_;
     TSIcontainer TSIcontainer_;
 
     public:
-        SolarRadiationPressure(Evig& evig, TSIcontainer& TSI)
-            : evig_(evig), TSIcontainer_(TSI) {}
+        SolarRadiationPressure(Eternal& eternal, TSIcontainer& TSI)
+            : eternal_(eternal), TSIcontainer_(TSI) {}
 
         struct SatelliteParameters {
             double S_srp;
@@ -35,10 +35,10 @@ class SolarRadiationPressure {
             const double rMoonAU = 1737400 / AU;
             const double lightSpeed = 299792458;
             
-            Eigen::Vector3d SunEarth = evig_.vector<Himmellegeme::Sola, Himmellegeme::Jorden>(tdb);
+            Eigen::Vector3d SunEarth = eternal_.vector<CelestialBody::Sun, CelestialBody::Earth>(tdb);
             Eigen::Vector3d EarthSun = -SunEarth;
 
-            Eigen::Vector3d SunMoon = evig_.vector<Himmellegeme::Sola, Himmellegeme::Månen>(tdb);
+            Eigen::Vector3d SunMoon = eternal_.vector<CelestialBody::Sun, CelestialBody::Moon>(tdb);
             Eigen::Vector3d MoonSun = -SunMoon;
             
             Eigen::Vector3d EarthSatellite = eci2icrf._transformVector(positionECI);

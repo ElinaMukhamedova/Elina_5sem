@@ -12,6 +12,11 @@ struct BDF4 {
     static constexpr std::array<double, size> alpha = {(double)11/6, -3, 1.5, (double)-1/3};
 };
 
+struct BDF5 {
+    static constexpr unsigned int size = 5;
+    static constexpr std::array<double, size> alpha = {(double)25/12, -4, 3, (double)-4/3, 0.25};
+};
+
 class CubicTime {
     public:
         static constexpr unsigned int dim = 1;

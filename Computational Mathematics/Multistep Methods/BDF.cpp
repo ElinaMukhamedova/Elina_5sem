@@ -40,8 +40,8 @@ int main() {
     std::cout << "logStep" << std::endl;
     for (double step : step_choice) {
         parameters.step = step;
-        auto integrated_cubicTimeRHS = integrateBDF<BDF4, CubicTime, RK4Table>(initialState_cubicTimeRHS, endTime_cubicTimeRHS, parameters, cubicTimeRHS);       
-        auto integrated_harmonicRHS = integrateBDF<BDF4, Harmonic, RK4Table>(initialState_harmonicRHS, endTime_harmonicRHS, parameters, harmonicRHS);
+        auto integrated_cubicTimeRHS = integrateBDF<BDF5, CubicTime, RK4Table>(initialState_cubicTimeRHS, endTime_cubicTimeRHS, parameters, cubicTimeRHS);       
+        auto integrated_harmonicRHS = integrateBDF<BDF5, Harmonic, RK4Table>(initialState_harmonicRHS, endTime_harmonicRHS, parameters, harmonicRHS);
         
         double error_cubicTimeRHS = 0, error_harmonicRHS = 0;
         for (auto StateAndArg : integrated_cubicTimeRHS) {

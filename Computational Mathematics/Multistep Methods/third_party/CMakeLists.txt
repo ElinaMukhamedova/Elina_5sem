@@ -1,0 +1,2 @@
+add_subdirectory(LinearAlgebra)
+add_subdirectory(googletest)

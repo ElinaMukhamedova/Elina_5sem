@@ -4,17 +4,16 @@
 #include <celestial_mechanics/time/Time.hpp>
 #include <string>
 #include <cmath>
-#include "TSIcontainer.hpp"
 #include "Eternal.hpp"
 
 class SolarRadiationPressure {
 
     Eternal eternal_;
-    TSIcontainer TSIcontainer_;
+    double TSI_;
 
     public:
-        SolarRadiationPressure(Eternal& eternal, TSIcontainer& TSI)
-            : eternal_(eternal), TSIcontainer_(TSI) {}
+        SolarRadiationPressure(Eternal& eternal, double TSI = 1361)
+            : eternal_(eternal), TSI_(TSI) {}
 
         struct SatelliteParameters {
             double S_srp;
@@ -27,9 +26,7 @@ class SolarRadiationPressure {
                                             const double mass, const SatelliteParameters& satParams,
                                                 const Params& params){
 
-            const Eigen::Quaternion eci2ICRF = params.eci2icrf;
             Time<Scale::TDB> tdb = params.tdb;
-            double tsi = TSIcontainer_.tsi(tdb.jd());
             
             const double AU = 149597870700;
             const double rEarth = 6378140;
@@ -37,7 +34,7 @@ class SolarRadiationPressure {
             const double lightSpeed = 299792458;
             
             Eigen::Vector3d SunEarth = eternal_.vector(tdb, CelestialBody::Sun, CelestialBody::Earth);
-            Eigen::Vector3d EarthSatellite = eci2ICRF._transformVector(positionECI);
+            Eigen::Vector3d EarthSatellite = positionECI;
             Eigen::Vector3d SunSatellite = SunEarth + EarthSatellite;
 
             int shadow = scalarCylindricalShadow(CelestialBody::Earth, rEarth, SunSatellite, tdb);
@@ -45,7 +42,7 @@ class SolarRadiationPressure {
 
             Eigen::Vector3d n = SunSatellite.normalized();
             double SunSatelliteDistance = SunSatellite.norm();
-            Eigen::Vector3d j0 = tsi * std::pow(AU/SunSatelliteDistance, 2) * n;
+            Eigen::Vector3d j0 = TSI_ * std::pow(AU/SunSatelliteDistance, 2) * n;
 
             Eigen::Vector3d F_srp = (shadow * satParams.S_srp / lightSpeed) * j0;
 

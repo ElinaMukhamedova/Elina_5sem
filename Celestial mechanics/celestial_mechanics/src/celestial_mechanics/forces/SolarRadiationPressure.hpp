@@ -1,8 +1,7 @@
 #pragma once
 
-#include <calceph/calceph.h>
 #include <Core>
-#include <time/Time.hpp>
+#include <celestial_mechanics/time/Time.hpp>
 #include <string>
 #include <cmath>
 #include "TSIcontainer.hpp"
@@ -21,6 +20,8 @@ class SolarRadiationPressure {
             double S_srp;
         };
 
+        int scalarCylindricalShadow(CelestialBody Caster, double rCaster, Eigen::Vector3d SunSatellite, Time<Scale::TDB> tdb);
+
         template<typename Params>
         Eigen::Vector3d calcAcceleration(const Eigen::Vector3d& positionECI, const Eigen::Vector3d& velocityECI,
                                             const double mass, const SatelliteParameters& satParams,
@@ -28,39 +29,20 @@ class SolarRadiationPressure {
 
             const Eigen::Quaternion eci2ICRF = params.eci2icrf;
             Time<Scale::TDB> tdb = params.tdb;
-            double tsi = TSIcontainer_.tsi(tdb);
-
+            double tsi = TSIcontainer_.tsi(tdb.jd());
+            
             const double AU = 149597870700;
-            const double rEarthAU = 6378140 / AU;
-            const double rMoonAU = 1737400 / AU;
+            const double rEarth = 6378140;
+            const double rMoon = 1737400;
             const double lightSpeed = 299792458;
             
-            Eigen::Vector3d SunEarth = eternal_.vector<CelestialBody::Sun, CelestialBody::Earth>(tdb);
-            Eigen::Vector3d EarthSun = -SunEarth;
-
-            Eigen::Vector3d SunMoon = eternal_.vector<CelestialBody::Sun, CelestialBody::Moon>(tdb);
-            Eigen::Vector3d MoonSun = -SunMoon;
-            
-            Eigen::Vector3d EarthSatellite = eci2icrf._transformVector(positionECI);
-            Eigen::Vector3d MoonSatellite = MoonSun + SunEarth + positionECI;
-
-            int shadow = 1;
-            if (EarthSun.dot(EarthSatellite) <= 0) {
-                double numeratorEarth = (EarthSun.cross(EarthSatellite)).norm();
-                double denominatorEarth = EarthSatellite.norm();
-                double rhoEarth = numeratorEarth / denominatorEarth;
-                if (rhoEarth < rEarthAU)
-                    shadow = 0;
-            }
-            if (MoonSun.dot(MoonSatellite) <= 0) {
-                double numeratorMoon = (MoonSun.cross(MoonSatellite)).norm();
-                double denominatorMoon = MoonSatellite.norm();
-                double rhoMoon = numeratorMoon / denominatorMoon;
-                if (rhoMoon < rMoonAU)
-                    shadow = 0;
-            }
-
+            Eigen::Vector3d SunEarth = eternal_.vector(tdb, CelestialBody::Sun, CelestialBody::Earth);
+            Eigen::Vector3d EarthSatellite = eci2ICRF._transformVector(positionECI);
             Eigen::Vector3d SunSatellite = SunEarth + EarthSatellite;
+
+            int shadow = scalarCylindricalShadow(CelestialBody::Earth, rEarth, SunSatellite, tdb);
+            shadow *= scalarCylindricalShadow(CelestialBody::Moon, rMoon, SunSatellite, tdb);
+
             Eigen::Vector3d n = SunSatellite.normalized();
             double SunSatelliteDistance = SunSatellite.norm();
             Eigen::Vector3d j0 = tsi * std::pow(AU/SunSatelliteDistance, 2) * n;

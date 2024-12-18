@@ -5,8 +5,10 @@
 #include "celestial_mechanics/time/Time.hpp"
 #include "celestial_mechanics/Exception.hpp"
 
-enum class CelestialBody{Mercury = 1, Venus = 2, Earth = 3, Mars = 4, Jupiter = 5, Saturn = 6,
-                        Uranus = 7, Neptune = 8, Pluto = 9, Moon = 10, Sun = 11};
+enum class CelestialBody{Mercury = 1, Venus = 2, Earth = 399,
+                        Mars = 4, Jupiter = 5, Saturn = 6,
+                        Uranus = 7, Neptune = 8, Pluto = 9,
+                        Moon = 301, Sun = 10};
 
 class Eternal {
     t_calcephbin *peph;
@@ -23,13 +25,7 @@ class Eternal {
             calceph_close(peph);
         }
 
-        template<CelestialBody Centre, CelestialBody Target>
-        Eigen::Vector3d vector(Time<Scale::TDB> tdb) {
-            double jdInt = tdb.jdInt(); double jdFrac = tdb.jdFrac();
+        double AU();
 
-            double PositionVelocity[6];
-            calceph_compute(peph, jdInt, jdFrac, (int)Target, (int)Centre, PositionVelocity);
-
-            return Eigen::Vector3d {PositionVelocity[0], PositionVelocity[1], PositionVelocity[2]};
-        }
+        Eigen::Vector3d vector(Time<Scale::TDB> tdb, CelestialBody Centre, CelestialBody Target);
 };

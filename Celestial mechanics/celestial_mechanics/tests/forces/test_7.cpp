@@ -4,7 +4,6 @@
 #include <filesystem>
 #include <string>
 #include "celestial_mechanics/time/Time.hpp"
-#include <iostream>
 
 class SolarRadiationPressureTest : public testing::Test {
     protected:

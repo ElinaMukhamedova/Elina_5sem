@@ -10,11 +10,13 @@
 struct BDF4 {
     static constexpr unsigned int size = 4;
     static constexpr std::array<double, size> alpha = {(double)11/6, -3, 1.5, (double)-1/3};
+    static constexpr std::array<double, size> beta = {(double)1/3, 0.5, -1, (double)1/6};
 };
 
 struct BDF5 {
     static constexpr unsigned int size = 5;
     static constexpr std::array<double, size> alpha = {(double)25/12, -4, 3, (double)-4/3, 0.25};
+    static constexpr std::array<double, size> beta = {0.25, (double)5/6, -1.5, 0.5, (double)1/12};
 };
 
 class CubicTime {
@@ -94,16 +96,16 @@ std::vector<typename RHS::StateAndArg> integrateBDF(
 
             for (unsigned int i = 0; i < BDF::size - 1; ++i)
                 if (i > 0)
-                    pastSum += BDF::alpha[1 + i] * solution[index - i].state;
+                    pastSum += BDF::beta[1 + i] * solution[index - i].state;
                 else
-                    pastSum = BDF::alpha[1] * solution[index].state;
+                    pastSum = BDF::beta[1] * solution[index].state;
 
             //std::cout << rhs.calc(currentStateAndArg) << std::endl;
             //std::cout << pastSum << std::endl;
 
             currentTime += step;
             unsigned int nIter = 0;
-            previousApproximation = (step * rhs.calc(currentStateAndArg) - pastSum) / BDF::alpha[0];
+            previousApproximation = (step * rhs.calc(currentStateAndArg) - pastSum) / BDF::beta[0];
             StateAndArgApproximation.state = previousApproximation;
             StateAndArgApproximation.arg = currentTime;
             currentApproximation = (step/BDF::alpha[0]) * rhs.calc(StateAndArgApproximation) - pastSum/BDF::alpha[0];
@@ -114,6 +116,11 @@ std::vector<typename RHS::StateAndArg> integrateBDF(
                 previousApproximation = currentApproximation;
                 StateAndArgApproximation.state = previousApproximation;
                 StateAndArgApproximation.arg = currentTime;
+                for (unsigned int i = 0; i < BDF::size - 1; ++i)
+                    if (i > 0)
+                        pastSum += BDF::alpha[1 + i] * solution[index - i].state;
+                    else
+                        pastSum = BDF::alpha[1] * solution[index].state;
                 currentApproximation = (step/BDF::alpha[0]) * rhs.calc(StateAndArgApproximation) - pastSum/BDF::alpha[0];
             }
 
